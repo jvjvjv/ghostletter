@@ -1,0 +1,22 @@
+[
+  {
+    "id": "1",
+    "name": "Mike Thompson",
+    "initials": "MT",
+    "color": "bg-purple-400",
+    "lastMessage": "Dick pic incoming!",
+    "timestamp": "2m ago",
+    "hasUnreadImage": true,
+    "hasUnreadMessage": false
+  },
+  {
+    "id": "2",
+    "name": "Alice Johnson",
+    "initials": "AJ",
+    "color": "bg-red-400",
+    "lastMessage": "How was lunch with Mike? Did he send you a dick pic? He's so corny!",
+    "timestamp": "10m ago",
+    "hasUnreadImage": false,
+    "hasUnreadMessage": true
+  }
+]

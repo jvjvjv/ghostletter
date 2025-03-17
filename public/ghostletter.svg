@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
+  <!-- Background Circle -->
+  <circle cx="150" cy="150" r="150" fill="#FAB422" />
+  
+  <!-- Ghost Body -->
+  <path d="M200,260 
+           C180,240 220,220 220,170 
+           C220,110 190,90 150,90 
+           C110,90 80,110 80,170 
+           C80,220 120,240 100,260 
+           L115,245 
+           L130,260 
+           L145,245 
+           L160,260 
+           L175,245 
+           L190,260 
+           Z" 
+        fill="white" 
+        stroke="#EEEEEE" 
+        stroke-width="3" />
+  
+  <!-- Ghost Eyes -->
+  <circle cx="120" cy="160" r="18" fill="black" />
+  <circle cx="180" cy="160" r="18" fill="black" />
+  
+  <!-- White Reflections in Eyes -->
+  <circle cx="126" cy="154" r="6" fill="white" />
+  <circle cx="186" cy="154" r="6" fill="white" />
+  
+  <!-- Ghost Mouth (slightly surprised/happy) -->
+  <path d="M130,205 Q150,225 170,205" 
+        fill="none" 
+        stroke="black" 
+        stroke-width="4" 
+        stroke-linecap="round" />
+        
+  <!-- Small Details/Shadows -->
+  <path d="M90,175 Q100,190 115,185" 
+        fill="none" 
+        stroke="#EEEEEE" 
+        stroke-width="3" 
+        opacity="0.7" />
+  
+  <path d="M210,175 Q200,190 185,185" 
+        fill="none" 
+        stroke="#EEEEEE" 
+        stroke-width="3" 
+        opacity="0.7" />
+</svg>

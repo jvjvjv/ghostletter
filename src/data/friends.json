@@ -1,0 +1,8 @@
+[
+  { "id": 1, "name": "John Smith", "initials": "JS", "color": "bg-indigo-400" },
+  { "id": 2, "name": "Alice Johnson", "initials": "AJ", "color": "bg-red-400" },
+  { "id": 3, "name": "Bob Davis", "initials": "BD", "color": "bg-green-400" },
+  { "id": 4, "name": "Sarah Wilson", "initials": "SW", "color": "bg-yellow-400" },
+  { "id": 5, "name": "Mike Thompson", "initials": "MT", "color": "bg-purple-400" },
+  { "id": 6, "name": "Emily Brown", "initials": "EB", "color": "bg-pink-400" }
+]
