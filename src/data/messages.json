@@ -1,0 +1,67 @@
+[
+  {
+    "id": 104,
+    "friendId": 5,
+    "content": "Hey there!",
+    "isFromMe": false,
+    "isRead": true,
+    "timestamp": "2025-03-20T19:30:00Z",
+    "type": "text"
+  },
+  {
+    "id": 105,
+    "friendId": 2,
+    "content": "Hey there!",
+    "isFromMe": false,
+    "isRead": true,
+    "timestamp": "2025-03-20T19:31:00Z",
+    "type": "text"
+  },
+  {
+    "id": 106,
+    "friendId": 5,
+    "content": "Hi Mike! What's up?",
+    "isFromMe": true,
+    "isRead": true,
+    "timestamp": "2025-03-20T19:32:00Z",
+    "type": "text"
+  },
+  {
+    "id": 107,
+    "friendId": 2,
+    "content": "Hi Alice!",
+    "isFromMe": true,
+    "isRead": true,
+    "timestamp": "2025-03-20T19:32:37Z",
+    "type": "text"
+  },
+  {
+    "id": 108,
+    "friendId": 5,
+    "content": "Dick pic incoming!",
+    "isFromMe": false,
+    "isRead": false,
+    "timestamp": "2025-03-20T19:36:00Z",
+    "type": "text"
+  },
+  {
+    "id": 109,
+    "friendId": 2,
+    "content": "How was lunch with Mike? Did he send you a dick pic? He's so corny!",
+    "isFromMe": false,
+    "isRead": true,
+    "timestamp": "2025-03-20T19:36:22Z",
+    "type": "text"
+  },
+  {
+    "id": 110,
+    "friendId": 5,
+    "content": "Photo",
+    "isFromMe": false,
+    "isRead": false,
+    "timestamp": "2025-03-20T19:37:30Z",
+    "type": "image",
+    "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Dick_Clark_%28cropped%29.JPG",
+    "imageDescription": "Dick Clark"
+  }
+]

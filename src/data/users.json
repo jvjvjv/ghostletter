@@ -1,0 +1,58 @@
+[
+  {
+    "id": 188,
+    "username": "demo01",
+    "email": "sarah.johnson@example.com",
+    "name": "Sarah Johnson",
+    "initials": "SJ",
+    "color": "bg-pink-500"
+  },
+  {
+    "id": 189,
+    "username": "mjones",
+    "email": "mike.jones@example.com",
+    "name": "Michael Jones",
+    "initials": "MJ",
+    "color": "bg-blue-500"
+  },
+  {
+    "id": 190,
+    "username": "asmith",
+    "email": "alex.smith@example.com",
+    "name": "Alex Smith",
+    "initials": "AS",
+    "color": "bg-green-500"
+  },
+  {
+    "id": 191,
+    "username": "rwilliams",
+    "email": "robert.williams@example.com",
+    "name": "Robert Williams",
+    "initials": "RW",
+    "color": "bg-purple-500"
+  },
+  {
+    "id": 192,
+    "username": "jbrown",
+    "email": "james.brown@example.com",
+    "name": "James Brown",
+    "initials": "JB",
+    "color": "bg-yellow-500"
+  },
+  {
+    "id": 193,
+    "username": "tgarcia",
+    "email": "thomas.garcia@example.com",
+    "name": "Thomas Garcia",
+    "initials": "TG",
+    "color": "bg-red-500"
+  },
+  {
+    "id": 194,
+    "username": "kroberts",
+    "email": "karen.robers@example.com",
+    "name": "Karen Roberts",
+    "initials": "KR",
+    "color": "bg-orange-500"
+  }
+]
