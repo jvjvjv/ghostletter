@@ -47,7 +47,7 @@ const SignIn = () => {
           {
             type: "text",
             name: "username",
-            placeholder: "Username",
+            placeholder: "demo01",
             autoComplete: "username",
             defaultValue: "demo01",
             required: true,
@@ -55,7 +55,7 @@ const SignIn = () => {
           {
             type: "password",
             name: "password",
-            placeholder: "Password",
+            placeholder: "demo01",
             autoComplete: "current-password",
             required: true,
           },

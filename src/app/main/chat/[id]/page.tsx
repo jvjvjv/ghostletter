@@ -95,10 +95,6 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatId]);
 
-  useEffect(() => {
-    console.log(messages);
-  }, [messages]);
-
   const startImageCountdown = (messageId: number, expiryTime: number, countdown: number) => {
     const msg = selectMessageById(store.getState(), messageId);
     if (!msg) throw new ReferenceError(`Unexpected error: Message with ID ${messageId} not found`);
