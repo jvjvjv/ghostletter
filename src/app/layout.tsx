@@ -1,21 +1,14 @@
 import type { Metadata } from "next";
-import { Barlow, Cousine } from "next/font/google";
 
 import { StoreProvider } from "@/store/StoreProvider";
 
 import "./globals.css";
 
-const barlow = Barlow({
-  variable: "--font-barlow",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
-
-const mono = Cousine({
-  variable: "--font-cousine",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
+// Temporarily using system fonts due to Google Fonts network restrictions
+// To re-enable Google Fonts, uncomment the following:
+// import { Barlow, Cousine } from "next/font/google";
+// const barlow = Barlow({ variable: "--font-barlow", subsets: ["latin"], weight: ["400", "700"] });
+// const mono = Cousine({ variable: "--font-cousine", subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
   title: "Ghost Letter",
@@ -30,7 +23,9 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className={`${barlow.variable} ${mono.variable} antialiased`}>{children}</body>
+        <body className="antialiased" style={{ fontFamily: "system-ui, -apple-system, sans-serif" }}>
+          {children}
+        </body>
       </html>
     </StoreProvider>
   );
