@@ -14,8 +14,7 @@ class Message extends Model
         'type',
         'is_read',
         'status',
-        'image_url',
-        'image_description',
+        'image_id',
         'img_viewed',
         'expiry_timestamp',
     ];
@@ -40,5 +39,13 @@ class Message extends Model
     public function recipient(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recipient_id');
+    }
+
+    /**
+     * Get the image attached to this message
+     */
+    public function image(): BelongsTo
+    {
+        return $this->belongsTo(Image::class);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Image;
 use App\Repositories\ImageRepository;
 use Illuminate\Http\UploadedFile;
 
@@ -14,18 +15,34 @@ class ImageService
     /**
      * Upload and store an image
      */
-    public function uploadImage(UploadedFile $image): array
+    public function uploadImage(int $userId, UploadedFile $file): Image
     {
-        // Business logic: Validate image dimensions, perform processing, etc.
+        // Business logic: Could add image validation, resizing, etc.
         // For now, just delegate to repository
-        return $this->imageRepository->store($image);
+        return $this->imageRepository->create($userId, $file);
     }
 
     /**
-     * Delete an image
+     * Get an image by ID
      */
-    public function deleteImage(string $path): bool
+    public function getImage(int $id): ?Image
     {
-        return $this->imageRepository->delete($path);
+        return $this->imageRepository->find($id);
+    }
+
+    /**
+     * Soft delete an image (marks as deleted in DB, doesn't delete file)
+     */
+    public function deleteImage(Image $image): bool
+    {
+        return $this->imageRepository->softDelete($image);
+    }
+
+    /**
+     * Get all images for a user
+     */
+    public function getUserImages(int $userId)
+    {
+        return $this->imageRepository->getAllForUser($userId);
     }
 }

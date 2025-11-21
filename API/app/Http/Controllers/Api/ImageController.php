@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Services\ImageService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ImageController extends Controller
 {
@@ -14,7 +15,7 @@ class ImageController extends Controller
     ) {}
 
     /**
-     * Upload an image and return the URL
+     * Upload an image and create database record
      */
     public function upload(Request $request): JsonResponse
     {
@@ -22,8 +23,11 @@ class ImageController extends Controller
             'image' => 'required|image|max:10240', // Max 10MB
         ]);
 
-        $imageData = $this->imageService->uploadImage($request->file('image'));
+        $image = $this->imageService->uploadImage(
+            Auth::id(),
+            $request->file('image')
+        );
 
-        return response()->json($imageData, 201);
+        return response()->json($image, 201);
     }
 }

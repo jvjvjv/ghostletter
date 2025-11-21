@@ -43,13 +43,12 @@ class MessageController extends Controller
             'recipient_id' => 'required|exists:users,id',
             'content' => 'required|string',
             'type' => 'required|in:text,image',
-            'image_url' => 'nullable|string',
-            'image_description' => 'nullable|string',
+            'image_id' => 'nullable|exists:images,id',
         ]);
 
         $message = $this->messageService->sendMessage(
             Auth::id(),
-            $request->only(['recipient_id', 'content', 'type', 'image_url', 'image_description'])
+            $request->only(['recipient_id', 'content', 'type', 'image_id'])
         );
 
         return response()->json($message, 201);

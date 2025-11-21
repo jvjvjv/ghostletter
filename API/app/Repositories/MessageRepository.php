@@ -14,7 +14,7 @@ class MessageRepository
     {
         return Message::where('sender_id', $userId)
             ->orWhere('recipient_id', $userId)
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
+            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image'])
             ->orderBy('created_at', 'desc')
             ->get();
     }
@@ -31,7 +31,7 @@ class MessageRepository
             $query->where('sender_id', $friendId)
                 ->where('recipient_id', $userId);
         })
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
+            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image'])
             ->orderBy('created_at', 'asc')
             ->get();
     }
@@ -46,7 +46,7 @@ class MessageRepository
                 ->orWhere('recipient_id', $userId);
         })
             ->where('id', $messageId)
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
+            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image'])
             ->first();
     }
 
@@ -76,7 +76,7 @@ class MessageRepository
     public function create(array $data): Message
     {
         $message = Message::create($data);
-        $message->load(['sender:id,name,initials,color', 'recipient:id,name,initials,color']);
+        $message->load(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image']);
 
         return $message;
     }
@@ -87,7 +87,7 @@ class MessageRepository
     public function update(Message $message, array $data): Message
     {
         $message->update($data);
-        return $message->fresh(['sender:id,name,initials,color', 'recipient:id,name,initials,color']);
+        return $message->fresh(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image']);
     }
 
     /**
