@@ -3,33 +3,27 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Services\ImageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ImageController extends Controller
 {
+    public function __construct(
+        private ImageService $imageService
+    ) {}
+
     /**
      * Upload an image and return the URL
      */
-    public function upload(Request $request)
+    public function upload(Request $request): JsonResponse
     {
         $request->validate([
             'image' => 'required|image|max:10240', // Max 10MB
         ]);
 
-        $image = $request->file('image');
-        $filename = Str::uuid() . '.' . $image->getClientOriginalExtension();
+        $imageData = $this->imageService->uploadImage($request->file('image'));
 
-        // Store in public disk under 'images' folder
-        $path = $image->storeAs('images', $filename, 'public');
-
-        $url = Storage::url($path);
-
-        return response()->json([
-            'url' => $url,
-            'full_url' => asset($url),
-            'path' => $path,
-        ], 201);
+        return response()->json($imageData, 201);
     }
 }

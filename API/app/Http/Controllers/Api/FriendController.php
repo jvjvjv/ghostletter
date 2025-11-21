@@ -3,21 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Friend;
-use App\Models\User;
+use App\Services\FriendService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class FriendController extends Controller
 {
+    public function __construct(
+        private FriendService $friendService
+    ) {}
+
     /**
      * Display a listing of the user's friends.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $friends = Friend::where('user_id', Auth::id())
-            ->with('friendUser:id,name,email,initials,color,avatar_url')
-            ->get();
+        $friends = $this->friendService->getAllFriends(Auth::id());
 
         return response()->json($friends);
     }
@@ -25,14 +27,9 @@ class FriendController extends Controller
     /**
      * Get a simple list of friends with user details
      */
-    public function friendsList()
+    public function friendsList(): JsonResponse
     {
-        $friends = Friend::where('user_id', Auth::id())
-            ->with('friendUser:id,name,email,initials,color,avatar_url')
-            ->get()
-            ->map(function ($friend) {
-                return $friend->friendUser;
-            });
+        $friends = $this->friendService->getFriendsList(Auth::id());
 
         return response()->json($friends);
     }
@@ -40,40 +37,34 @@ class FriendController extends Controller
     /**
      * Store a newly created friend relationship.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'friend_user_id' => 'required|exists:users,id',
         ]);
 
-        // Check if friendship already exists
-        $existingFriend = Friend::where('user_id', Auth::id())
-            ->where('friend_user_id', $request->friend_user_id)
-            ->first();
+        try {
+            $friend = $this->friendService->addFriend(
+                Auth::id(),
+                $request->friend_user_id
+            );
 
-        if ($existingFriend) {
-            return response()->json(['message' => 'Friend already added'], 409);
+            return response()->json($friend, 201);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 409);
         }
-
-        $friend = Friend::create([
-            'user_id' => Auth::id(),
-            'friend_user_id' => $request->friend_user_id,
-        ]);
-
-        $friend->load('friendUser:id,name,email,initials,color,avatar_url');
-
-        return response()->json($friend, 201);
     }
 
     /**
      * Display the specified friend.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        $friend = Friend::where('user_id', Auth::id())
-            ->where('id', $id)
-            ->with('friendUser:id,name,email,initials,color,avatar_url')
-            ->firstOrFail();
+        $friend = $this->friendService->getFriend(Auth::id(), (int) $id);
+
+        if (!$friend) {
+            return response()->json(['message' => 'Friend not found'], 404);
+        }
 
         return response()->json($friend);
     }
@@ -81,7 +72,7 @@ class FriendController extends Controller
     /**
      * Update the specified friend (not typically needed)
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
         return response()->json(['message' => 'Update not supported for friends'], 405);
     }
@@ -89,14 +80,14 @@ class FriendController extends Controller
     /**
      * Remove the specified friend.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
-        $friend = Friend::where('user_id', Auth::id())
-            ->where('id', $id)
-            ->firstOrFail();
+        try {
+            $this->friendService->removeFriend(Auth::id(), (int) $id);
 
-        $friend->delete();
-
-        return response()->json(['message' => 'Friend removed successfully']);
+            return response()->json(['message' => 'Friend removed successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 }

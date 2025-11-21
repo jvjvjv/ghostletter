@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\Message;
+use App\Services\MessageService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 
 class MessageController extends Controller
 {
+    public function __construct(
+        private MessageService $messageService
+    ) {}
+
     /**
      * Display a listing of messages for the authenticated user.
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $messages = Message::where('sender_id', Auth::id())
-            ->orWhere('recipient_id', Auth::id())
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $messages = $this->messageService->getAllMessages(Auth::id());
 
         return response()->json($messages);
     }
@@ -27,18 +27,9 @@ class MessageController extends Controller
     /**
      * Get conversation between authenticated user and a friend.
      */
-    public function conversation($friendId)
+    public function conversation($friendId): JsonResponse
     {
-        $messages = Message::where(function ($query) use ($friendId) {
-            $query->where('sender_id', Auth::id())
-                ->where('recipient_id', $friendId);
-        })->orWhere(function ($query) use ($friendId) {
-            $query->where('sender_id', $friendId)
-                ->where('recipient_id', Auth::id());
-        })
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+        $messages = $this->messageService->getConversation(Auth::id(), (int) $friendId);
 
         return response()->json($messages);
     }
@@ -46,7 +37,7 @@ class MessageController extends Controller
     /**
      * Store a newly created message.
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'recipient_id' => 'required|exists:users,id',
@@ -56,17 +47,10 @@ class MessageController extends Controller
             'image_description' => 'nullable|string',
         ]);
 
-        $message = Message::create([
-            'sender_id' => Auth::id(),
-            'recipient_id' => $request->recipient_id,
-            'content' => $request->content,
-            'type' => $request->type,
-            'image_url' => $request->image_url,
-            'image_description' => $request->image_description,
-            'status' => 'sent',
-        ]);
-
-        $message->load(['sender:id,name,initials,color', 'recipient:id,name,initials,color']);
+        $message = $this->messageService->sendMessage(
+            Auth::id(),
+            $request->only(['recipient_id', 'content', 'type', 'image_url', 'image_description'])
+        );
 
         return response()->json($message, 201);
     }
@@ -74,15 +58,13 @@ class MessageController extends Controller
     /**
      * Display the specified message.
      */
-    public function show(string $id)
+    public function show(string $id): JsonResponse
     {
-        $message = Message::where(function ($query) {
-            $query->where('sender_id', Auth::id())
-                ->orWhere('recipient_id', Auth::id());
-        })
-            ->where('id', $id)
-            ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color'])
-            ->firstOrFail();
+        $message = $this->messageService->getMessage(Auth::id(), (int) $id);
+
+        if (!$message) {
+            return response()->json(['message' => 'Message not found'], 404);
+        }
 
         return response()->json($message);
     }
@@ -90,73 +72,65 @@ class MessageController extends Controller
     /**
      * Update the specified message.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): JsonResponse
     {
-        $message = Message::where('sender_id', Auth::id())
-            ->where('id', $id)
-            ->firstOrFail();
-
         $request->validate([
             'content' => 'sometimes|string',
             'status' => 'sometimes|in:sent,delivered,read,expired',
         ]);
 
-        $message->update($request->only(['content', 'status']));
+        try {
+            $message = $this->messageService->updateMessage(
+                Auth::id(),
+                (int) $id,
+                $request->only(['content', 'status'])
+            );
 
-        return response()->json($message);
+            return response()->json($message);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**
      * Mark a message as read.
      */
-    public function markAsRead($id)
+    public function markAsRead($id): JsonResponse
     {
-        $message = Message::where('recipient_id', Auth::id())
-            ->where('id', $id)
-            ->firstOrFail();
+        try {
+            $message = $this->messageService->markAsRead(Auth::id(), (int) $id);
 
-        $message->update([
-            'is_read' => true,
-            'status' => 'read',
-        ]);
-
-        return response()->json($message);
+            return response()->json($message);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 
     /**
      * Mark an image message as viewed and set expiry.
      */
-    public function markImageAsViewed($id)
+    public function markImageAsViewed($id): JsonResponse
     {
-        $message = Message::where('recipient_id', Auth::id())
-            ->where('id', $id)
-            ->where('type', 'image')
-            ->firstOrFail();
+        try {
+            $message = $this->messageService->markImageAsViewed(Auth::id(), (int) $id);
 
-        if (!$message->img_viewed) {
-            $expiryTime = Carbon::now()->addSeconds(10); // 10 seconds to view
-
-            $message->update([
-                'img_viewed' => true,
-                'expiry_timestamp' => $expiryTime,
-                'is_read' => true,
-            ]);
+            return response()->json($message);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
         }
-
-        return response()->json($message);
     }
 
     /**
      * Remove the specified message.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): JsonResponse
     {
-        $message = Message::where('sender_id', Auth::id())
-            ->where('id', $id)
-            ->firstOrFail();
+        try {
+            $this->messageService->deleteMessage(Auth::id(), (int) $id);
 
-        $message->delete();
-
-        return response()->json(['message' => 'Message deleted successfully']);
+            return response()->json(['message' => 'Message deleted successfully']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        }
     }
 }
