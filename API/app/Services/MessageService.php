@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Repositories\MessageRepository;
 use App\Models\Message;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class MessageService
@@ -14,19 +15,19 @@ class MessageService
     ) {}
 
     /**
-     * Get all messages for a user
+     * Get all messages for a user with optional pagination
      */
-    public function getAllMessages(int $userId): Collection
+    public function getAllMessages(int $userId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return $this->messageRepository->getAllForUser($userId);
+        return $this->messageRepository->getAllForUser($userId, $perPage);
     }
 
     /**
-     * Get conversation between two users
+     * Get conversation between two users with optional pagination
      */
-    public function getConversation(int $userId, int $friendId): Collection
+    public function getConversation(int $userId, int $friendId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return $this->messageRepository->getConversation($userId, $friendId);
+        return $this->messageRepository->getConversation($userId, $friendId, $perPage);
     }
 
     /**
@@ -105,7 +106,8 @@ class MessageService
 
         // Business logic: Only set expiry on first view
         if (!$message->img_viewed) {
-            $expiryTime = Carbon::now()->addSeconds(10); // 10 seconds to view
+            $expirySeconds = config('app.message_expiry_seconds', 30);
+            $expiryTime = Carbon::now()->addSeconds($expirySeconds);
 
             return $this->messageRepository->update($message, [
                 'img_viewed' => true,

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repositories\FriendRepository;
 use App\Models\Friend;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class FriendService
@@ -13,20 +14,25 @@ class FriendService
     ) {}
 
     /**
-     * Get all friends for a user
+     * Get all friends for a user with optional pagination
      */
-    public function getAllFriends(int $userId): Collection
+    public function getAllFriends(int $userId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return $this->friendRepository->getAllForUser($userId);
+        return $this->friendRepository->getAllForUser($userId, $perPage);
     }
 
     /**
-     * Get a simple list of friend users
+     * Get a simple list of friend users with optional pagination
      */
-    public function getFriendsList(int $userId): Collection
+    public function getFriendsList(int $userId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return $this->friendRepository->getAllForUser($userId)
-            ->map(fn($friend) => $friend->friendUser);
+        $friends = $this->friendRepository->getAllForUser($userId, $perPage);
+
+        if ($friends instanceof LengthAwarePaginator) {
+            return $friends->through(fn($friend) => $friend->friendUser);
+        }
+
+        return $friends->map(fn($friend) => $friend->friendUser);
     }
 
     /**

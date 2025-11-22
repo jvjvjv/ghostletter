@@ -3,28 +3,34 @@
 namespace App\Repositories;
 
 use App\Models\Message;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class MessageRepository
 {
     /**
-     * Get all messages for a user (sent or received)
+     * Get all messages for a user (sent or received) with pagination
      */
-    public function getAllForUser(int $userId): Collection
+    public function getAllForUser(int $userId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return Message::where('sender_id', $userId)
+        $query = Message::where('sender_id', $userId)
             ->orWhere('recipient_id', $userId)
             ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->orderBy('created_at', 'desc');
+
+        if ($perPage !== null) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     /**
-     * Get conversation between two users
+     * Get conversation between two users with pagination
      */
-    public function getConversation(int $userId, int $friendId): Collection
+    public function getConversation(int $userId, int $friendId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return Message::where(function ($query) use ($userId, $friendId) {
+        $query = Message::where(function ($query) use ($userId, $friendId) {
             $query->where('sender_id', $userId)
                 ->where('recipient_id', $friendId);
         })->orWhere(function ($query) use ($userId, $friendId) {
@@ -32,8 +38,13 @@ class MessageRepository
                 ->where('recipient_id', $userId);
         })
             ->with(['sender:id,name,initials,color', 'recipient:id,name,initials,color', 'image'])
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->orderBy('created_at', 'asc');
+
+        if ($perPage !== null) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     /**

@@ -123,4 +123,17 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Message Expiry Duration
+    |--------------------------------------------------------------------------
+    |
+    | This value determines how long (in seconds) an image message remains
+    | viewable after being opened. This mimics Snapchat-style ephemeral
+    | messaging where images disappear after a short viewing window.
+    |
+    */
+
+    'message_expiry_seconds' => env('MESSAGE_EXPIRY_SECONDS', 30),
+
 ];

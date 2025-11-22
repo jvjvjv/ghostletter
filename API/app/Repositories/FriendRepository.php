@@ -3,18 +3,24 @@
 namespace App\Repositories;
 
 use App\Models\Friend;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 
 class FriendRepository
 {
     /**
-     * Get all friends for a user
+     * Get all friends for a user with pagination
      */
-    public function getAllForUser(int $userId): Collection
+    public function getAllForUser(int $userId, ?int $perPage = null): Collection|LengthAwarePaginator
     {
-        return Friend::where('user_id', $userId)
-            ->with('friendUser:id,name,email,initials,color,avatar_url')
-            ->get();
+        $query = Friend::where('user_id', $userId)
+            ->with('friendUser:id,name,email,initials,color,avatar_url');
+
+        if ($perPage !== null) {
+            return $query->paginate($perPage);
+        }
+
+        return $query->get();
     }
 
     /**

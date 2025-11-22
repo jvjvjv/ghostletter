@@ -17,9 +17,10 @@ class MessageController extends Controller
     /**
      * Display a listing of messages for the authenticated user.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $messages = $this->messageService->getAllMessages(Auth::id());
+        $perPage = $request->input('per_page') ? (int) $request->input('per_page') : null;
+        $messages = $this->messageService->getAllMessages(Auth::id(), $perPage);
 
         return response()->json($messages);
     }
@@ -27,9 +28,10 @@ class MessageController extends Controller
     /**
      * Get conversation between authenticated user and a friend.
      */
-    public function conversation($friendId): JsonResponse
+    public function conversation(Request $request, $friendId): JsonResponse
     {
-        $messages = $this->messageService->getConversation(Auth::id(), (int) $friendId);
+        $perPage = $request->input('per_page') ? (int) $request->input('per_page') : null;
+        $messages = $this->messageService->getConversation(Auth::id(), (int) $friendId, $perPage);
 
         return response()->json($messages);
     }

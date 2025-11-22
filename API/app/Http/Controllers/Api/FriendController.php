@@ -17,9 +17,10 @@ class FriendController extends Controller
     /**
      * Display a listing of the user's friends.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
-        $friends = $this->friendService->getAllFriends(Auth::id());
+        $perPage = $request->input('per_page') ? (int) $request->input('per_page') : null;
+        $friends = $this->friendService->getAllFriends(Auth::id(), $perPage);
 
         return response()->json($friends);
     }
@@ -27,9 +28,10 @@ class FriendController extends Controller
     /**
      * Get a simple list of friends with user details
      */
-    public function friendsList(): JsonResponse
+    public function friendsList(Request $request): JsonResponse
     {
-        $friends = $this->friendService->getFriendsList(Auth::id());
+        $perPage = $request->input('per_page') ? (int) $request->input('per_page') : null;
+        $friends = $this->friendService->getFriendsList(Auth::id(), $perPage);
 
         return response()->json($friends);
     }
@@ -70,15 +72,7 @@ class FriendController extends Controller
     }
 
     /**
-     * Update the specified friend (not typically needed)
-     */
-    public function update(Request $request, string $id): JsonResponse
-    {
-        return response()->json(['message' => 'Update not supported for friends'], 405);
-    }
-
-    /**
-     * Remove the specified friend.
+     * Destroy the specified friendship.
      */
     public function destroy(string $id): JsonResponse
     {
