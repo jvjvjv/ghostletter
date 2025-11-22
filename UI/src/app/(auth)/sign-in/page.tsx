@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+import * as z from "zod";
 
 import type { GhostFormResponse } from "@/components/GhostForm/GhostForm";
 import GhostForm from "@/components/GhostForm/GhostForm";
@@ -11,11 +12,32 @@ import { setUser } from "@/store/authSlice";
 import { selectUserByUsername } from "@/store/usersSlice";
 import { authenticate } from "@/clientApi/auth";
 
+const signInSchema = z.object({
+  username: z.string().min(3, { message: "Username must be at least 3 characters" }),
+  password: z.string().min(3, { message: "Password must be at least 3 characters" }),
+});
+
 const SignIn = () => {
   const handleSignIn = async (previousData: GhostFormResponse, form: FormData): Promise<GhostFormResponse> => {
-    // TODO: This should use Server Actions and Redux
     const username = form.get("username");
     const password = form.get("password");
+
+    // Validate with Zod
+    const validation = signInSchema.safeParse({ username, password });
+    if (!validation.success) {
+      const errors: { [key: string]: string } = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          errors[err.path[0].toString()] = err.message;
+        }
+      });
+      return {
+        success: false,
+        message: "Please fix the errors below",
+        errors,
+        fields: { username, password },
+      };
+    }
 
     const response: GhostFormResponse = await authenticate(username as string, password as string);
     if (response.success) {
@@ -35,7 +57,7 @@ const SignIn = () => {
 
   return (
     <main className="page page-center">
-      <div className="mb-8 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
+      <div className="mb-2 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
         <Image priority src="/ghostletter-circle.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
       </div>
       <h1 className="font-bold">Sign In</h1>
