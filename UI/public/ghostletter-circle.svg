@@ -1,4 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Background circle with brand color -->
+  <circle cx="512" cy="512" r="487" fill="#FAB422"/>
   <!-- Ghost body - white sheet with wavy bottom -->
 <path d="M 512 256
         C 410 256, 256 358, 256 512

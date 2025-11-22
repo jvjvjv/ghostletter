@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -37,7 +36,7 @@ const SignIn = () => {
   return (
     <main className="page page-center">
       <div className="mb-8 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
-        <Image priority src="/ghostletter.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
+        <Image priority src="/ghostletter-circle.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
       </div>
       <h1 className="font-bold">Sign In</h1>
       <GhostForm
