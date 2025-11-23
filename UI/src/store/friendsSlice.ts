@@ -1,7 +1,7 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { Friend } from "@/types/Friend";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 import FriendsData from "@/data/friends.json";
 

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import { addMessage } from "@/store/messagesSlice";
-import store from "@/store";
+import React, { useEffect, useState } from "react";
 
 import Avatar from "@/components/Avatar";
+import store from "@/store";
+import { addMessage } from "@/store/messagesSlice";
+
 
 const state = store.getState();
 const friends = state.friends.friends;

@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import { DateTime } from "luxon";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState, useCallback } from "react";
 
 import type { ChatPreview } from "@/types/ChatPreview";
-import type { Message } from "@/types/Message";
 import type { Friend } from "@/types/Friend";
-
-import { selectFriendById } from "@/store/friendsSlice";
-import { selectMessages } from "@/store/messagesSlice";
-import store from "@/store";
+import type { Message } from "@/types/Message";
 
 import Avatar from "@/components/Avatar";
+import store from "@/store";
+import { selectFriendById } from "@/store/friendsSlice";
+import { selectMessages } from "@/store/messagesSlice";
+
 
 export default function ChatListView() {
   const state = store.getState();

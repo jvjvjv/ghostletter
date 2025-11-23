@@ -1,7 +1,7 @@
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
 
 import type { Message } from "@/types/Message";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
 import MessagesData from "@/data/messages.json";
 

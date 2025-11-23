@@ -1,20 +1,21 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import * as z from "zod";
 
 import type { GhostFormResponse } from "@/components/GhostForm/GhostForm";
+
+import { authenticate } from "@/clientApi/auth";
 import GhostForm from "@/components/GhostForm/GhostForm";
 import store from "@/store";
 import { setUser } from "@/store/authSlice";
 import { selectUserByUsername } from "@/store/usersSlice";
-import { authenticate } from "@/clientApi/auth";
 
 const signInSchema = z.object({
   username: z.string().min(3, { message: "Username must be at least 3 characters" }),
-  password: z.string().min(3, { message: "Password must be at least 3 characters" }),
+  password: z.string().min(3, { message: "Password must be at least 6 characters" }),
 });
 
 const SignIn = () => {

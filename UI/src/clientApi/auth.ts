@@ -1,4 +1,5 @@
 import type { GhostFormResponse } from "@/components/GhostForm/GhostForm";
+
 import { sleep } from "@/lib/utils";
 
 export const authenticate = async (

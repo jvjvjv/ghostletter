@@ -1,18 +1,18 @@
 "use client";
 
-import React, { use, useState, useEffect, useRef, useCallback } from "react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { DateTime } from "luxon";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { use, useState, useEffect, useRef, useCallback } from "react";
 
 import type { Friend } from "@/types/Friend";
 import type { Message } from "@/types/Message";
 
+import Avatar from "@/components/Avatar";
+import store from "@/store";
 import { selectFriendById } from "@/store/friendsSlice";
 import { addMessage, selectMessageById, selectMessagesByFriendId, updateMessage } from "@/store/messagesSlice";
-import store from "@/store";
 
-import Avatar from "@/components/Avatar";
 
 const THRESHOLD = 10; // seconds
 
@@ -71,7 +71,7 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
       updateMessageLocalAndStore({ ...msg, isRead: true });
     }
     return msgs;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // Helper function to get friend details (mock data)
@@ -92,7 +92,7 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
     const friendDetails = getFriendById(chatId);
     setFriend(friendDetails);
     getMessagesByFriendId(chatId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [chatId]);
 
   const startImageCountdown = (messageId: number, expiryTime: number, countdown: number) => {

@@ -1,8 +1,9 @@
-import Cookies from "js-cookie";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import { createSlice } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
 
 import type { User } from "@/types/User";
+import type { PayloadAction } from "@reduxjs/toolkit";
+
 
 export interface AuthState {
   authenticatedUser: User | null;

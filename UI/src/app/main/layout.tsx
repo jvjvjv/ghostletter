@@ -1,5 +1,6 @@
-import NavButton from "@/components/NavButton";
 import { fas } from "@fortawesome/free-solid-svg-icons";
+
+import NavButton from "@/components/NavButton";
 
 const { faComments, faCameraRetro, faGear, faLocationDot, faUserGroup } = fas;
 
