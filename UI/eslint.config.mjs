@@ -1,86 +1,173 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import importPlugin from 'eslint-plugin-import';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import nextPlugin from '@next/eslint-plugin-next';
+import reactHooksPlugin from 'eslint-plugin-react-hooks';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import tsParser from '@typescript-eslint/parser';
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript", "plugin:@typescript-eslint/recommended-type-checked"),
   {
+    ignores: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/.next/**',
+      '**/eslint.config.*',
+      '**/postcss.config.*',
+      '**/prettier.config.*',
+      '**/tailwind.config.*',
+    ],
+  },
+  {
+    "overrides": [
+      {
+        "files": ["**/*.test.ts", "**/*.spec.ts"],
+        "rules": {
+          "@typescript-eslint/unbound-method": "off"
+        }
+      }
+    ]
+  },
+  // JS/Next.js config
+  {
+    files: ['**/*.{js,jsx,mjs,cjs}'],
+    plugins: {
+      import: importPlugin,
+      next: nextPlugin,
+      '@next/next': nextPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
     rules: {
-      "@typescript-eslint/array-type": [
-        "error",
+      ...nextPlugin.configs['core-web-vitals'].rules,
+      ...nextPlugin.configs['recommended'].rules,
+      ...importPlugin.configs['recommended'].rules,
+      'import/order': [
+        'error',
         {
-          default: "generic",
-        }
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type',
+          ],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
       ],
-      "@typescript-eslint/consistent-type-exports": [
-        "error",
-        {
-          "fixMixedExportsWithInlineTypeSpecifier": true
-        }
+      'import/consistent-type-specifier-style': ['error', 'porfer-top-level'],
+      'import/extensions': 'off',
+      'import/no-unresolved': 'off',
+      'import/no-duplicates': 'error',
+      'import/newline-after-import': 'error',
+      'no-console': [
+        'warn',
+        { allow: ['warn', 'error', 'debug'] },
       ],
-      "@typescript-eslint/consistent-type-imports": [
-        "error",
+    },
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+    },
+  },
+  // TypeScript config
+  {
+    files: ['**/*.{ts,tsx}'],
+    plugins: {
+      import: importPlugin,
+      '@typescript-eslint': tsPlugin,
+      next: nextPlugin,
+      '@next/next': nextPlugin,
+      'react-hooks': reactHooksPlugin,
+    },
+    rules: {
+      ...nextPlugin.configs['core-web-vitals'].rules,
+      ...nextPlugin.configs['recommended'].rules,
+      ...importPlugin.configs['recommended'].rules,
+      ...importPlugin.configs['typescript'].rules,
+      ...tsPlugin.configs['recommended-type-checked'].rules,
+      '@typescript-eslint/array-type': [
+        'error',
+        { default: 'generic' },
+      ],
+      '@typescript-eslint/consistent-type-exports': [
+        'error',
+        { fixMixedExportsWithInlineTypeSpecifier: true },
+      ],
+      '@typescript-eslint/consistent-type-imports': [
+        'error',
         {
-          fixStyle: "separate-type-imports",
-          prefer: "type-imports",
+          fixStyle: 'separate-type-imports',
+          prefer: 'type-imports',
           disallowTypeAnnotations: false,
         },
       ],
-      "@typescript-eslint/method-signature-style": [
-        "error",
-        "property",
+      '@typescript-eslint/method-signature-style': [
+        'error',
+        'property',
       ],
-      "@typescript-eslint/no-explicit-any": "error",
-      "@typescript-eslint/no-import-type-side-effects": "error",
-      "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
-      "@typescript-eslint/no-unnecessary-condition": "error",
-      "@typescript-eslint/no-unnecessary-type-assertion": "error",
-      "@typescript-eslint/no-unnecessary-type-parameters": "error",
-      "@typescript-eslint/no-unsafe-return": "error",
-      "@typescript-eslint/no-unused-expressions": [
-        "warn",
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-import-type-side-effects': 'error',
+      '@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+      '@typescript-eslint/no-unnecessary-condition': 'error',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'error',
+      '@typescript-eslint/no-unnecessary-type-parameters': 'error',
+      '@typescript-eslint/no-unsafe-return': 'error',
+      '@typescript-eslint/no-unused-expressions': [
+        'warn',
         {
           allowShortCircuit: true,
           allowTernary: true,
           allowTaggedTemplates: true,
         },
       ],
-      "@typescript-eslint/no-unused-vars": [
-        "error",
+      '@typescript-eslint/no-unused-vars': [
+        'error',
         {
-          argsIgnorePattern: "^_",
-          varsIgnorePattern: "^_",
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
           ignoreRestSiblings: true,
-          args: "after-used",
+          args: 'after-used',
         },
       ],
-      "no-console": [
-        "warn",
+      'import/order': [
+        'error',
         {
-          allow: [
-            "warn",
-            "error",
-            "debug"
-          ]
-        }
+          groups: [
+            'builtin',
+            'external',
+            'internal',
+            'parent',
+            'sibling',
+            'index',
+            'object',
+            'type',
+          ],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
       ],
-    }
-  },
-  {
-    languageOptions: {
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: __dirname,
-      }
+      'import/extensions': 'off',
+      'import/no-unresolved': 'off',
+      'import/no-duplicates': 'error',
+      'import/newline-after-import': 'error',
+      'no-console': [
+        'warn',
+        { allow: ['warn', 'error', 'debug'] },
+      ],
     },
-  }
+    languageOptions: {
+      parser: tsParser,
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      parserOptions: {
+        tsconfigRootDir: process.cwd(),
+        projectService: true,
+      },
+    },
+  },
 ];
 
 export default eslintConfig;

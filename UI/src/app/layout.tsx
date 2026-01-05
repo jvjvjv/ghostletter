@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
 import { Barlow, Cousine } from "next/font/google";
 
-import { StoreProvider } from "@/store/StoreProvider";
+import type { Metadata } from "next";
+
+import { StoreProvider } from "@/providers/StoreProvider";
 
 import "./globals.css";
 

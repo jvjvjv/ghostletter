@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+
 import type { RedirectType } from "next/navigation";
 
 export function GET() {

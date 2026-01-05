@@ -129,8 +129,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | This value determines how long (in seconds) an image message remains
-    | viewable after being opened. This mimics Snapchat-style ephemeral
-    | messaging where images disappear after a short viewing window.
+    | viewable after being opened. This mimics the ephemeral messaging style
+    |  where images disappear after a short viewing window.
     |
     */
 

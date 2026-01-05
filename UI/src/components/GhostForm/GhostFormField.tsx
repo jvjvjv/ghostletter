@@ -1,6 +1,8 @@
-import React from "react";
-
 import type { GhostFormField as FormField } from "@/components/GhostForm/GhostForm";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+
 
 const GhostFormField = ({
   type,
@@ -19,9 +21,10 @@ const GhostFormField = ({
     case "email":
     case "password":
       return (
-        <>
-          {label ? <label className="m-1 text-sm">{label}</label> : null}
-          <input
+        <div className="w-full space-y-2">
+          {label ? <Label htmlFor={name}>{label}</Label> : null}
+          <Input
+            id={name}
             type={type}
             name={name}
             placeholder={placeholder}
@@ -29,37 +32,41 @@ const GhostFormField = ({
             defaultValue={(defaultValue as string) || ""}
             required={required}
             disabled={disabled}
-            className={`m-0 w-full rounded border p-2 ${error ? "border-red-500" : "border-gray-300"}`}
+            aria-invalid={!!error}
             title={error}
           />
-        </>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
       );
 
     case "textarea":
       return (
-        <>
-          <label>{label}</label>
+        <div className="w-full space-y-2">
+          <Label htmlFor={name}>{label}</Label>
           <textarea
+            id={name}
             name={name}
             placeholder={placeholder}
             defaultValue={(defaultValue as string) || ""}
             required={required}
             disabled={disabled}
-            className="w-full rounded border p-2"
+            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 min-h-20 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
           />
-        </>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
       );
 
     case "select":
       return (
-        <>
-          <label>{label}</label>
+        <div className="w-full space-y-2">
+          <Label htmlFor={name}>{label}</Label>
           <select
+            id={name}
             name={name}
             defaultValue={(defaultValue as string) || ""}
             required={required}
             disabled={disabled}
-            className="w-full rounded border p-2"
+            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {options?.map((option) => (
               <option key={option.value} value={option.value}>
@@ -67,36 +74,40 @@ const GhostFormField = ({
               </option>
             ))}
           </select>
-        </>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
       );
 
     case "switch":
       return (
-        <>
-          <label>{label}</label>
+        <div className="flex items-center space-x-2">
           <input
+            id={name}
             type="checkbox"
             name={name}
             defaultChecked={defaultValue as boolean}
             required={required}
             disabled={disabled}
+            className="border-input h-4 w-4 rounded disabled:cursor-not-allowed disabled:opacity-50"
           />
-        </>
+          <Label htmlFor={name}>{label}</Label>
+        </div>
       );
 
     case "date":
       return (
-        <>
-          <label>{label}</label>
-          <input
+        <div className="w-full space-y-2">
+          <Label htmlFor={name}>{label}</Label>
+          <Input
+            id={name}
             type="date"
             name={name}
             defaultValue={(defaultValue as string) || ""}
             required={required}
             disabled={disabled}
-            className="w-full rounded border p-2"
           />
-        </>
+          {error && <p className="text-sm text-red-600">{error}</p>}
+        </div>
       );
 
     default:
