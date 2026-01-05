@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useActionState } from "react";
 import Form from "next/form";
+import React, { useActionState } from "react";
 
 import GhostFormField from "@/components/GhostForm/GhostFormField";
+import { Button } from "@/components/ui/button";
 
 export type GhostFormResponse = {
   success: boolean;
@@ -52,9 +53,9 @@ const GhostForm = ({ action, fields, submitText }: IForm) => {
           defaultValue={(state.fields?.[field.name] as typeof field.defaultValue) ?? field.defaultValue}
         />
       ))}
-      <button type="submit" className="button-submit rounded px-4 py-2 font-bold">
+      <Button type="submit" className="w-full" disabled={isPending}>
         {submitText ?? "Submit"}
-      </button>
+      </Button>
       {isPending ? (
         <div className="rounded border border-blue-400 bg-blue-50 p-2 text-blue-700">Logging in . . . .</div>
       ) : state.message && !state.success ? (

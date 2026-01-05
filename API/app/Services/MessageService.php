@@ -106,7 +106,7 @@ class MessageService
 
         // Business logic: Only set expiry on first view
         if (!$message->img_viewed) {
-            $expirySeconds = config('app.message_expiry_seconds', 30);
+            $expirySeconds = (int) config('app.message_expiry_seconds', 30);
             $expiryTime = Carbon::now()->addSeconds($expirySeconds);
 
             return $this->messageRepository->update($message, [

@@ -2,15 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## TODO: Issues to Fix
+
+1. **Avatar Issue**: Avatar doesn't seem to be working as expected - needs investigation and fix.
+2. **Photo Preview**: "Click to view photo" should display a blurred version of the photo instead of placeholder text.
+3. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
+4. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
+
 ## Project Overview
 
 Ghost Letter is an ephemeral messaging platform (similar to Snapchat) built as a pnpm monorepo with:
+
 - **UI**: Next.js 16 frontend with React 19, Tailwind CSS 4, and Redux Toolkit
 - **API**: Laravel 12 backend with Sanctum authentication and RESTful API
 
 ## Development Commands
 
 ### Root Level (Monorepo)
+
 ```bash
 pnpm install              # Install all dependencies
 pnpm dev                  # Run both UI and API concurrently
@@ -21,6 +30,7 @@ pnpm lint                 # Lint all projects
 ```
 
 ### UI-Specific Commands
+
 ```bash
 pnpm --filter ghost-letter-ui dev      # Start dev server with Turbopack
 pnpm --filter ghost-letter-ui build    # Production build
@@ -28,6 +38,7 @@ pnpm --filter ghost-letter-ui lint     # Run ESLint
 ```
 
 ### API-Specific Commands
+
 ```bash
 pnpm --filter ghost-letter-api dev             # Start Laravel server
 pnpm --filter ghost-letter-api test            # Run PHPUnit tests
@@ -45,6 +56,7 @@ php artisan storage:link                # Link storage for images
 ```
 
 ### Initial Setup
+
 ```bash
 # From root
 pnpm install
@@ -60,6 +72,7 @@ php artisan storage:link  # Link storage directory
 ## Architecture
 
 ### Monorepo Structure
+
 ```
 ghostletter/
 ├── UI/                  # Next.js 16 frontend
@@ -98,11 +111,13 @@ The Laravel backend follows a **Repository-Service-Controller** pattern:
 ### UI Architecture
 
 - **App Router**: Uses Next.js 16 App Router with route groups:
+
   - `(auth)/`: Authentication pages (sign-in)
   - `(legal)/`: Terms and privacy pages
   - `main/`: Protected main app (chat, camera, send-to)
 
 - **State Management**: Redux Toolkit with slices:
+
   - `authSlice`: User authentication state
   - `friendsSlice`: Friends list and relationships
   - `messagesSlice`: Messages and conversations
@@ -113,12 +128,14 @@ The Laravel backend follows a **Repository-Service-Controller** pattern:
 ### Database Schema
 
 **Core Models**:
+
 - `users`: User accounts with 2FA support, avatar, initials, color
 - `friends`: Bilateral friendship relationships (user_id, friend_id)
 - `messages`: Text and image messages with read/viewed tracking, expiry timestamps
 - `images`: Uploaded image files with storage paths
 
 **Key Relationships**:
+
 - Users have many Friends (many-to-many through friends table)
 - Users have many Messages (sent and received)
 - Messages may have one Image
@@ -126,6 +143,7 @@ The Laravel backend follows a **Repository-Service-Controller** pattern:
 ### Authentication Flow
 
 - **Backend**: Laravel Fortify + Bspdx/Authkit with Sanctum tokens
+
   - Supports email/password, 2FA (TOTP), and passkeys (WebAuthn)
   - All API routes protected by `auth:sanctum` middleware
 

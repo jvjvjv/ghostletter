@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => env('LOG_CHANNEL', 'stack'),
+    'default' => env('LOG_CHANNEL', 'daily-stack'),
 
     /*
     |--------------------------------------------------------------------------
@@ -51,6 +51,36 @@ return [
     */
 
     'channels' => [
+
+        'daily-stack' => [
+            'driver' => 'stack',
+            'channels' => ['app-error', 'app-debug', 'app-info'],
+            'ignore_exceptions' => false,
+        ],
+
+        'app-error' => [
+            'driver' => 'daily',
+            'days' => 7,
+            'bubble' => false,
+            'path' => storage_path('logs/psmf-error.log'),
+            'level' => 'error',
+        ],
+
+        'app-debug' => [
+            'driver' => 'daily',
+            'days' => 7,
+            'bubble' => true,
+            'path' => storage_path('logs/psmf-debug.log'),
+            'level' => 'debug',
+        ],
+
+        'app-info' => [
+            'driver' => 'daily',
+            'days' => 7,
+            'bubble' => false,
+            'path' => storage_path('logs/psmf-info.log'),
+            'level' => 'info',
+        ],
 
         'stack' => [
             'driver' => 'stack',
@@ -89,7 +119,7 @@ return [
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
-                'connectionString' => 'tls://'.env('PAPERTRAIL_URL').':'.env('PAPERTRAIL_PORT'),
+                'connectionString' => 'tls://' . env('PAPERTRAIL_URL') . ':' . env('PAPERTRAIL_PORT'),
             ],
             'processors' => [PsrLogMessageProcessor::class],
         ],

@@ -31,6 +31,18 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/storage/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api-ghostletter.jasonvertucio.com",
+        port: "",
+        pathname: "/storage/**",
+      },
     ],
   },
 };

@@ -1,18 +1,26 @@
 "use client";
 
-import React, { use, useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { DateTime } from "luxon";
+import React, { use, useState, useEffect, useRef, useCallback } from "react";
 
 import type { Friend } from "@/types/Friend";
 import type { Message } from "@/types/Message";
 
-import { selectFriendById } from "@/store/friendsSlice";
-import { addMessage, selectMessageById, selectMessagesByFriendId, updateMessage } from "@/store/messagesSlice";
-import store from "@/store";
-
 import Avatar from "@/components/Avatar";
+import MessageItem from "@/components/chat/messages/MessageItem";
+import store from "@/store";
+import { selectFriendById } from "@/store/friendsSlice";
+import {
+  addMessage,
+  selectMessageById,
+  selectMessagesByFriendId,
+  updateMessage,
+  fetchConversationThunk,
+  sendMessageThunk,
+  markReadThunk,
+  markViewedThunk,
+} from "@/store/messagesSlice";
+import { useAppSelector } from "@/store/hooks";
 
 const THRESHOLD = 10; // seconds
 
@@ -25,7 +33,6 @@ type ChatDetailPageProps = {
 };
 
 export default function ChatDetailView(props: ChatDetailPageProps) {
-  const state = store.getState();
   const { id } = use(props.params);
   const chatId = parseInt(id);
   const router = useRouter();
@@ -34,11 +41,13 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
   const [newMessage, setNewMessage] = useState("");
   const [imageViewTimers, setImageViewTimers] = useState<Record<string, NodeJS.Timeout>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const currentUser = useAppSelector((state) => state.auth.authenticatedUser);
+  const conversationLoading = useAppSelector((state) => state.messages.conversationLoading[chatId]);
 
   // Scroll to bottom when messages change
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [state.messages]);
+  }, [messages]);
 
   // Load chat data
   useEffect(() => {
@@ -57,22 +66,28 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
     };
   }, [imageViewTimers]);
 
-  // Helper function to get chat messages (mock data)
-  const getMessagesByFriendId = useCallback((friendId: number): Array<Message> => {
-    const msgs = selectMessagesByFriendId(store.getState(), friendId);
-    setMessages(msgs);
-    for (const msg of msgs) {
-      if (msg.type === "image") {
-        if (msg.imgViewed && msg.expiryTimestamp && msg.countdown) {
-          startImageCountdown(msg.id, msg.expiryTimestamp, msg.countdown);
+  // Helper function to get chat messages
+  const getMessagesByFriendId = useCallback(
+    (friendId: number): Array<Message> => {
+      const msgs = selectMessagesByFriendId(store.getState(), friendId);
+      setMessages(msgs);
+      for (const msg of msgs) {
+        if (msg.type === "image") {
+          if (msg.imgViewed && msg.expiryTimestamp && msg.countdown) {
+            startImageCountdown(msg.id, msg.expiryTimestamp, msg.countdown);
+          }
+          continue;
         }
-        continue;
+        // Mark text messages as read via API if not from current user
+        if (!msg.isRead && !msg.isFromMe && currentUser) {
+          store.dispatch(markReadThunk({ messageId: msg.id, currentUserId: currentUser.id }));
+        }
+        updateMessageLocalAndStore({ ...msg, isRead: true });
       }
-      updateMessageLocalAndStore({ ...msg, isRead: true });
-    }
-    return msgs;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      return msgs;
+    },
+    [currentUser],
+  );
 
   // Helper function to get friend details (mock data)
   const getFriendById = useCallback((id: number): Friend => {
@@ -87,13 +102,23 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
   };
 
   useEffect(() => {
-    // In a real app, fetch friend details and messages from API/database
-    // Get conversation based on friend ID
-    const friendDetails = getFriendById(chatId);
-    setFriend(friendDetails);
-    getMessagesByFriendId(chatId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chatId]);
+    // Fetch friend details - may not exist in store yet during deep link
+    try {
+      const friendDetails = getFriendById(chatId);
+      setFriend(friendDetails);
+    } catch {
+      // Friend not in store yet - will be populated when friends list loads
+      console.warn("Friend not yet loaded:", chatId);
+    }
+
+    // Fetch conversation from API
+    if (currentUser) {
+      store.dispatch(fetchConversationThunk({ friendId: chatId, currentUserId: currentUser.id })).then(() => {
+        // After fetching, get the messages from store
+        getMessagesByFriendId(chatId);
+      });
+    }
+  }, [chatId, currentUser, getFriendById, getMessagesByFriendId]);
 
   const startImageCountdown = (messageId: number, expiryTime: number, countdown: number) => {
     const msg = selectMessageById(store.getState(), messageId);
@@ -126,26 +151,34 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
         clearInterval(countdownInterval);
       }
     }, 1000);
-    setImageViewTimers((prev) => ({ ...prev, [`i${messageId} }`]: countdownInterval }));
+    setImageViewTimers((prev) => ({ ...prev, [`i${messageId}`]: countdownInterval }));
   };
 
-  const handleSendMessage = () => {
-    if (newMessage.trim() === "") return;
+  const handleSendMessage = async () => {
+    if (newMessage.trim() === "" || !currentUser) return;
 
-    store.dispatch(
-      addMessage({
-        id: 0,
-        content: newMessage,
-        friendId: getFriendById(chatId).id || 0,
-        isFromMe: true,
-        isRead: true,
-        timestamp: new Date().toISOString(),
-        type: "text",
-      }),
-    );
+    const content = newMessage;
+    setNewMessage(""); // Clear input immediately for better UX
 
-    setMessages(selectMessagesByFriendId(store.getState(), chatId));
-    setNewMessage("");
+    // Send message via API
+    try {
+      await store
+        .dispatch(
+          sendMessageThunk({
+            recipientId: chatId,
+            content,
+            type: "text",
+            currentUserId: currentUser.id,
+          }),
+        )
+        .unwrap();
+
+      // Refresh messages from store
+      setMessages(selectMessagesByFriendId(store.getState(), chatId));
+    } catch (error) {
+      console.error("Failed to send message:", error);
+      setNewMessage(content); // Restore message on error
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -155,7 +188,7 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
     }
   };
 
-  const handleImageClick = (messageId: number, expiryTimestamp?: number) => {
+  const handleImageClick = async (messageId: number, expiryTimestamp?: number) => {
     const now = Date.now();
     const msg = selectMessageById(store.getState(), messageId);
     if (!msg) throw new ReferenceError(`Unexpected error: Message with ID ${messageId} not found`);
@@ -182,6 +215,15 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
         countdown: THRESHOLD,
       });
 
+      // Mark as viewed via API
+      if (currentUser) {
+        try {
+          await store.dispatch(markViewedThunk({ messageId, currentUserId: currentUser.id })).unwrap();
+        } catch (error) {
+          console.error("Failed to mark image as viewed:", error);
+        }
+      }
+
       startImageCountdown(messageId, expiryTime, THRESHOLD);
     }
   };
@@ -204,67 +246,18 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
 
       {/* Message list */}
       <main className="h-full overflow-y-auto p-4">
-        <div className="space-y-4">
-          {messages.map((message) => (
-            <div key={message.id} className={`flex ${message.isFromMe ? "justify-end" : "justify-start"}`}>
-              <div
-                className={`max-w-[75%] rounded-lg p-3 ${
-                  message.isFromMe
-                    ? "rounded-br-none bg-indigo-500 text-white"
-                    : "rounded-bl-none border border-gray-200 bg-white"
-                }`}
-              >
-                {message.type === "text" ? (
-                  <p>{message.content}</p>
-                ) : (
-                  <div className="relative">
-                    {/* For image messages */}
-                    {message.imageUrl && !message.expiryTimestamp ? (
-                      <div className="relative">
-                        <button
-                          className="button-submit rounded p-2"
-                          onClick={() => handleImageClick(message.id, message.expiryTimestamp)}
-                        >
-                          Click to view photo
-                        </button>
-                      </div>
-                    ) : message.imageUrl && message.countdown && message.expiryTimestamp ? (
-                      <div className="relative overflow-hidden">
-                        <Image
-                          id={`image-${message.id}`}
-                          src={message.imageUrl}
-                          alt={message.imageDescription || "Photo"}
-                          width={300}
-                          height={240}
-                          className={`max-h-64 w-auto max-w-xs cursor-pointer rounded object-cover transition-all duration-300 ${
-                            message.expiryTimestamp < Date.now() ? "blur-xl" : ""
-                          }`}
-                        />
-                        {/* Countdown overlay */}
-                        <div
-                          id={`countdown-${message.id}`}
-                          className={`bg-opacity-70 absolute top-2 right-2 rounded-full bg-black px-2 py-1 text-xs text-white ${
-                            message.imgViewed ? "" : "hidden"
-                          }`}
-                        >
-                          {message.expiryTimestamp < Date.now() ? "Expired" : message.countdown + "s"}
-                        </div>
-                      </div>
-                    ) : message.imageUrl && message.status == "expired" ? (
-                      <p className="text-gray-500 italic">Photo expired</p>
-                    ) : (
-                      <p className="text-gray-500 italic">Photo unavailable</p>
-                    )}
-                  </div>
-                )}
-                <div className={`mt-1 text-xs ${message.isFromMe ? "text-indigo-200" : "text-gray-500"}`}>
-                  {DateTime.fromISO(message.timestamp).toLocaleString(DateTime.DATETIME_MED)}
-                </div>
-              </div>
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
+        {conversationLoading ? (
+          <div className="flex h-full items-center justify-center">
+            <p className="text-gray-500">Loading messages...</p>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {messages.map((message) => (
+              <MessageItem key={message.id} message={message} onImageClick={handleImageClick} />
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+        )}
       </main>
 
       {/* Message input */}

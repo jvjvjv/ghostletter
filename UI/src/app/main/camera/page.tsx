@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 
 export default function CameraView() {
   const router = useRouter();
@@ -56,7 +56,7 @@ export default function CameraView() {
     };
     // Keep the dependency array empty to run this effect only once during mount,
     // otherwise it will run on every render.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   const capturePhoto = () => {

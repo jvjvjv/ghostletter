@@ -1,41 +1,71 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
+import * as z from "zod";
 
 import type { GhostFormResponse } from "@/components/GhostForm/GhostForm";
+
+import { login } from "@/clientApi/auth";
 import GhostForm from "@/components/GhostForm/GhostForm";
 import store from "@/store";
 import { setUser } from "@/store/authSlice";
-import { selectUserByUsername } from "@/store/usersSlice";
-import { authenticate } from "@/clientApi/auth";
+
+const signInSchema = z.object({
+  username: z
+    .string()
+    .min(3, { message: "Username must be at least 3 characters" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
 
 const SignIn = () => {
-  const handleSignIn = async (previousData: GhostFormResponse, form: FormData): Promise<GhostFormResponse> => {
-    // TODO: This should use Server Actions and Redux
+  const handleSignIn = async (
+    previousData: GhostFormResponse,
+    form: FormData,
+  ): Promise<GhostFormResponse> => {
     const username = form.get("username");
     const password = form.get("password");
 
-    const response: GhostFormResponse = await authenticate(username as string, password as string);
-    if (response.success) {
-      const user = selectUserByUsername(store.getState(), username as string);
-      if (!user) {
-        return {
-          success: false,
-          message: "User not found",
-          errors: { username: "User not found" },
-        };
-      }
-      store.dispatch(setUser(user));
+    // Validate with Zod
+    const validation = signInSchema.safeParse({ username, password });
+    if (!validation.success) {
+      const errors: { [key: string]: string } = {};
+      validation.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          errors[err.path[0].toString()] = err.message;
+        }
+      });
+      return {
+        success: false,
+        message: "Please fix the errors below",
+        errors,
+        fields: { username, password },
+      };
+    }
+
+    // Call real API login with username
+    const result = await login(username as string, password as string);
+
+    if (result.success && result.user) {
+      // Store user in Redux (token is already stored in cookie by login function)
+      store.dispatch(setUser({ user: result.user }));
       redirect("/main/camera");
     }
-    return response;
+
+    return {
+      success: false,
+      message: result.message || "Invalid credentials",
+      errors: { username: result.message || "Invalid credentials" },
+      fields: { username, password },
+    };
   };
 
   return (
     <main className="page page-center">
-      <div className="mb-8 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
+      <div className="mb-2 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
         <Image priority src="/ghostletter-circle.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
       </div>
       <h1 className="font-bold">Sign In</h1>
@@ -46,15 +76,15 @@ const SignIn = () => {
           {
             type: "text",
             name: "username",
-            placeholder: "demo01",
+            placeholder: "username",
             autoComplete: "username",
-            defaultValue: "demo01",
+            defaultValue: "",
             required: true,
           },
           {
             type: "password",
             name: "password",
-            placeholder: "demo01",
+            placeholder: "Password",
             autoComplete: "current-password",
             required: true,
           },

@@ -11,9 +11,15 @@
     "build:ui": "pnpm --filter ghost-letter-ui build",
     "build:api": "pnpm --filter ghost-letter-api build",
     "lint": "pnpm run --recursive lint",
-    "clean": "pnpm run --recursive clean"
+    "clean": "pnpm run --recursive clean",
+    "test": "pnpm run test:api && pnpm run test:e2e",
+    "test:api": "pnpm --filter ghost-letter-api test",
+    "test:e2e": "cd UI && pnpm test:e2e",
+    "test:e2e:ui": "cd UI && pnpm test:e2e:ui",
+    "test:e2e:headed": "cd UI && pnpm test:e2e:headed",
+    "test:e2e:debug": "cd UI && pnpm test:e2e:debug"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "concurrently": "^9.2.1"
   }
 }
