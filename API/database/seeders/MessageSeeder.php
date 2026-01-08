@@ -17,6 +17,7 @@ class MessageSeeder extends Seeder {
             rand(120, 88), // Raina to Alicia - how'd last night go
             rand(87, 73), // Alicia to Raina - he's so weird
             rand(83, 60), // Dick to Alicia - I had a great time last night!
+            rand(59, 58), // Dick to Alicia - Incoming dick pic!!!
             rand(58, 57), // Dick to Alicia - Dick pic
             rand(73, 57), // Raina to Alicia - Did he sent you a dick pic yet? He IS so weird!
         ];
@@ -52,7 +53,16 @@ class MessageSeeder extends Seeder {
             'is_read' => false,
             'created_at' => now()->sub('minutes', $message_times_now_minus[2]),
             'updated_at' => now()->sub('minutes', $message_times_now_minus[2]),
-
+        ]);
+        Message::create([
+            'sender_id' => $dick->id,
+            'recipient_id' => $alicia->id,
+            'content' => 'Incoming dick pic!!!',
+            'type' => 'text',
+            'status' => 'delivered',
+            'is_read' => false,
+            'created_at' => now()->sub('minutes', $message_times_now_minus[3]),
+            'updated_at' => now()->sub('minutes', $message_times_now_minus[3]),
         ]);
 
         Message::create([
@@ -63,8 +73,8 @@ class MessageSeeder extends Seeder {
             'type' => 'image',
             'status' => 'delivered',
             'is_read' => true,
-            'created_at' => now()->sub('minutes', $message_times_now_minus[3]),
-            'updated_at' => now()->sub('minutes', $message_times_now_minus[3]),
+            'created_at' => now()->sub('minutes', $message_times_now_minus[4]),
+            'updated_at' => now()->sub('minutes', $message_times_now_minus[4]),
         ]);
 
 
@@ -75,8 +85,8 @@ class MessageSeeder extends Seeder {
             'type' => 'text',
             'status' => 'delivered',
             'is_read' => false,
-            'created_at' => now()->sub('minutes', $message_times_now_minus[4]),
-            'updated_at' => now()->sub('minutes', $message_times_now_minus[4]),
+            'created_at' => now()->sub('minutes', $message_times_now_minus[5]),
+            'updated_at' => now()->sub('minutes', $message_times_now_minus[5]),
 
         ]);
     }
