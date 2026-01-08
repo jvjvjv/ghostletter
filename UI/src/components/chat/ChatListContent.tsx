@@ -2,8 +2,10 @@
 
 import type { ChatPreview } from "@/types/ChatPreview";
 import type { Friend } from "@/types/Friend";
+import Image from "next/image";
 
 import ChatPreviewItem from "./ChatPreviewItem";
+import { Button } from "../ui/button";
 
 type ChatListContentProps = {
   chats: Array<ChatPreview>;
@@ -43,8 +45,8 @@ export default function ChatListContent({
 function LoadingState() {
   return (
     <div className="flex h-full flex-col items-center justify-center p-4 text-center">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-200">
-        <span className="text-2xl">⏳</span>
+      <div className="bg-secondary mb-4 flex h-24 w-24 items-center justify-center rounded-full">
+        <Image priority src="/ghostletter.svg" width={96} height={96} alt="Ghostletter ghost" />
       </div>
       <p className="text-gray-500">Loading chats...</p>
     </div>
@@ -54,14 +56,14 @@ function LoadingState() {
 function EmptyState({ onTakePhoto }: { onTakePhoto: () => void }) {
   return (
     <div className="flex h-full flex-col items-center justify-center p-4 text-center">
-      <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-200">
-        <span className="text-2xl">👻</span>
+      <div className="bg-secondary mb-4 flex h-24 w-24 items-center justify-center rounded-full">
+        <Image priority src="/ghostletter-frown.svg" width={96} height={96} alt="Ghostletter ghost, frowning" />
       </div>
       <h3 className="mb-2 text-lg font-semibold">No chats yet</h3>
       <p className="mb-4 text-gray-500">Start taking photos and sending them to friends!</p>
-      <button onClick={onTakePhoto} className="button-submit">
+      <Button onClick={onTakePhoto} variant="ghost" className="button-submit">
         Take a Photo
-      </button>
+      </Button>
     </div>
   );
 }

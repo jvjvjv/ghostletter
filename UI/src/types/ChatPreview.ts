@@ -5,6 +5,5 @@ export interface ChatPreview {
   color: string;
   lastMessage: string;
   timestamp: string;
-  hasUnreadImage: boolean;
-  hasUnreadMessage: boolean;
+  hasUnread: boolean;
 }

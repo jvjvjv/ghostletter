@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## TODO: Issues to Fix
 
-1. **Avatar Issue**: Avatar doesn't seem to be working as expected - needs investigation and fix.
-2. **Photo Preview**: "Click to view photo" should display a blurred version of the photo instead of placeholder text.
-3. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
-4. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
+1. **Photo Preview**: "Click to view photo" should display a blurred version of the photo instead of placeholder text.
+2. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
+3. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
+4. **Switch Component Library**: Replace Tailwind with something cooler, like [Mantine](https://mantine.dev/)!
 
 ## Project Overview
 

@@ -122,7 +122,7 @@
   }
 
   .page {
-    @apply flex h-screen w-full flex-col p-4;
+    @apply flex h-svh w-full flex-col p-4;
   }
 
   .page.page-center {

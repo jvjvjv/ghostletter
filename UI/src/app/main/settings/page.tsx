@@ -22,14 +22,14 @@ export default function SettingsView() {
 
   if (!currentUser) {
     return (
-      <div className="flex h-screen items-center justify-center">
+      <div className="flex h-svh items-center justify-center">
         <span>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex h-svh flex-col bg-white">
       <header className="border-b border-gray-200 bg-white p-4">
         <h1 className="text-center text-xl font-semibold">Settings</h1>
       </header>

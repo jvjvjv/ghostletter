@@ -94,7 +94,7 @@ export default function CameraView() {
 
   /* eslint-disable @next/next/no-img-element */
   return (
-    <div className="flex h-screen flex-col bg-black">
+    <div className="flex h-svh flex-col bg-black">
       {/* Main Content Area */}
       <main className="relative flex flex-1 flex-col overflow-hidden">
         {error ? (

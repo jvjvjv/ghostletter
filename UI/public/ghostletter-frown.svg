@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <!-- Ghost body - white sheet with wavy bottom -->
+<path d="M 512 256
+        C 410 256, 256 358, 256 512
+        L 256 717
+        C 256 743, 282 768, 307 768
+        L 333 742
+        C 348 717, 369 717, 384 742
+        L 410 768
+        C 425 742, 446 742, 461 768
+        L 487 742
+        C 502 717, 523 717, 538 742
+        L 564 768
+        C 579 742, 600 742, 615 768
+        L 641 742
+        C 656 717, 677 717, 692 742
+        L 717 768
+        C 743 768, 768 743, 768 717
+        L 768 512
+        C 768 358, 614 256, 512 256 Z"
+        fill="white"
+        stroke="#e0e0e0"
+        stroke-width="10"/>
+  <!-- Left eye -->
+  <ellipse cx="410" cy="461" rx="61" ry="92" fill="#333333"/>
+  <ellipse cx="425" cy="446" rx="26" ry="36" fill="white"/>
+  <!-- Right eye -->
+  <ellipse cx="614" cy="461" rx="61" ry="92" fill="#333333"/>
+  <ellipse cx="629" cy="446" rx="26" ry="36" fill="white"/>
+  <!-- Sad mouth (frown) -->
+<path d="M 435 650 Q 512 584, 589 640"
+     stroke="#333333"
+     stroke-width="15"
+     fill="none"
+     stroke-linecap="round"/>
+  <!-- Optional blush marks -->
+  <ellipse cx="333" cy="538" rx="41" ry="26" fill="#ffb3ba" opacity="0.5"/>
+  <ellipse cx="691" cy="538" rx="41" ry="26" fill="#ffb3ba" opacity="0.5"/>
+</svg>

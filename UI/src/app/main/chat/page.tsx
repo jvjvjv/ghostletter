@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 
 import type { ChatPreview } from "@/types/ChatPreview";
@@ -67,10 +67,9 @@ export default function ChatListView() {
             name: friendDetails.name,
             color: friendDetails.color,
             initials: friendDetails.initials,
-            lastMessage: chat.content,
+            lastMessage: !chat.imageUrl ? chat.content : "📸",
             timestamp: chat.timestamp,
-            hasUnreadImage: chat.type === "image" && !chat.isRead && !chat.isFromMe,
-            hasUnreadMessage: chat.type === "text" && !chat.isRead && !chat.isFromMe,
+            hasUnread: !chat.isRead && !chat.isFromMe,
           });
         }
       });

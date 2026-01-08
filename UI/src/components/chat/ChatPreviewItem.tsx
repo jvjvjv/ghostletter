@@ -31,12 +31,7 @@ export default function ChatPreviewItem({ chat, friend, onSelect }: ChatPreviewI
         </div>
         <div className="flex items-center">
           <p className="text-sm text-gray-600">{truncateMessage(chat.lastMessage)}</p>
-
-          {chat.hasUnreadImage && (
-            <span className="ml-2 rounded-full bg-indigo-500 px-1.5 py-0.5 text-xs text-white">📸</span>
-          )}
-
-          {chat.hasUnreadMessage && <span className="ml-2 h-2 w-2 rounded-full bg-indigo-500"></span>}
+          {chat.hasUnread && <span className="bg-secondary ml-2 h-2 w-2 rounded-full"></span>}
         </div>
       </div>
     </div>

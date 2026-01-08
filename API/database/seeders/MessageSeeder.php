@@ -28,7 +28,7 @@ class MessageSeeder extends Seeder {
             'content' => "how'd last night go",
             'type' => 'text',
             'status' => 'delivered',
-            'is_read' => false,
+            'is_read' => true,
             'created_at' => now()->sub('minutes', $message_times_now_minus[0]),
             'updated_at' => now()->sub('minutes', $message_times_now_minus[0]),
         ]);
@@ -72,7 +72,7 @@ class MessageSeeder extends Seeder {
             'image_id' => Image::inRandomOrder()->first()->id,
             'type' => 'image',
             'status' => 'delivered',
-            'is_read' => true,
+            'is_read' => false,
             'created_at' => now()->sub('minutes', $message_times_now_minus[4]),
             'updated_at' => now()->sub('minutes', $message_times_now_minus[4]),
         ]);

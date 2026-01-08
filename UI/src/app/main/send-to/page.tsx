@@ -111,7 +111,7 @@ export default function SendToView() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-white">
+    <div className="flex h-svh flex-col bg-white">
       <header className="border-b border-gray-200 bg-white p-4">
         <h1 className="text-center text-xl font-semibold">Send To</h1>
       </header>
