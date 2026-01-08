@@ -34,7 +34,7 @@ export default function SettingsView() {
         <h1 className="text-center text-xl font-semibold">Settings</h1>
       </header>
       <main className="flex flex-1 flex-col items-center overflow-y-auto p-4">
-        <Avatar friend={currentUser} size={12} />
+        <Avatar friend={currentUser} size={24} />
         <div className="mt-4 w-full max-w-sm space-y-4">
           <div className="space-y-2">
             <Label htmlFor="name">Name</Label>
