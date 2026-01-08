@@ -16,9 +16,9 @@ export interface NavButtonProps {
 
 const NavButton = ({ active, icon, label, action, disabled, tooltip }: NavButtonProps) => {
   const activeColor = 'var(--mantine-color-secondary-5)'; // Secondary color (replaces indigo-500)
-  const inactiveColor = 'var(--mantine-color-gray-4)'; // Gray (replaces gray-400)
-  const activeBg = 'var(--mantine-color-secondary-5)';
-  const inactiveBg = 'var(--mantine-color-gray-2)';
+  const inactiveColor = 'var(--mantine-color-secondary-4)'; // info (replaces gray-400)
+  const activeBg = 'var(--mantine-color-info-5)';
+  const inactiveBg = 'var(--mantine-color-info-2)';
 
   return (
     <UnstyledButton
@@ -43,7 +43,7 @@ const NavButton = ({ active, icon, label, action, disabled, tooltip }: NavButton
             height: '40px',
             borderRadius: '50%',
             backgroundColor: active ? activeBg : inactiveBg,
-            color: active ? 'white' : inactiveColor,
+            color: active ? activeColor : inactiveColor,
             transition: disabled ? 'none' : 'transform 0.2s, background-color 0.2s',
           }}
           onMouseEnter={(e) => {

@@ -58,7 +58,7 @@ const Avatar = (props: AvatarProps) => {
     <MantineAvatar
       src={friend.imageUrl}
       size={sizeMap[size]}
-      radius="xl"
+      radius="100%"
       className={className}
       styles={{
         root: {

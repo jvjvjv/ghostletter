@@ -25,7 +25,7 @@ export default function RootLayout({
           backgroundColor: 'var(--mantine-color-gray-1)',
         }}
       >
-        <Group gap={0} justify="space-around" align="center" h="100%">
+        <Group gap={0} bg={'primary'} justify="space-around" align="center" h="100%">
           <NavButton
             active={false}
             icon={<IconMapPin size={20} />}
