@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export const config = {
-  matcher: ["/((?!sign-in|sign-up|api|_next/static|_next/image|.*\\.(?:png|svg)$).*)"],
+  matcher: ["/((?!sign-in|sign-up|terms|privacy|api|_next/static|_next/image|.*\\.(?:png|svg)$).*)"],
 };
 
 export default function proxy(req: NextRequest) {

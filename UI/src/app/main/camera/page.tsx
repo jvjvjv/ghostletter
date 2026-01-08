@@ -158,9 +158,9 @@ export default function CameraView() {
                 <ActionIcon
                   onClick={capturePhoto}
                   size={80}
-                  radius="xl"
+                  radius="50%"
                   variant="white"
-                  style={{ border: '4px solid white' }}
+                  style={{ border: '4px solid black', outline: '4px solid white', boxShadow: '2px 2px 12px black'}}
                   aria-label="Take photo"
                 >
                   <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'white' }} />

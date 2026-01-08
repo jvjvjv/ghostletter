@@ -38,14 +38,13 @@ const getTextColor = (backgroundColor: string): string => {
   const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
 
   // Return white for dark backgrounds, black for light backgrounds
-  return luminance > 0.5 ? "var(--foreground)" : "var(--background)";
+  return luminance > 0.5 ? "black" : "white";
 };
 
 const Avatar = (props: AvatarProps) => {
   const { friend, size, className } = props;
 
-  // Map Tailwind sizes to pixels (Tailwind's size-8 = 2rem = 32px)
-  const sizeMap = {
+  const textSize = {
     8: 32,   // 2rem
     10: 40,  // 2.5rem
     16: 64,  // 4rem
@@ -57,15 +56,16 @@ const Avatar = (props: AvatarProps) => {
   return (
     <MantineAvatar
       src={friend.imageUrl}
-      size={sizeMap[size]}
-      radius="100%"
+      size={textSize[size]}
+      radius="50%"
       className={className}
+      color={textColor}
       styles={{
         root: {
           backgroundColor: friend.color,
-          color: textColor,
         },
       }}
+      alt={friend.name}
     >
       {!friend.imageUrl && friend.initials}
     </MantineAvatar>
