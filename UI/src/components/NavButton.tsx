@@ -2,13 +2,13 @@
 
 import { UnstyledButton, Stack, Text } from '@mantine/core';
 import React from "react";
-import type { TablerIconsProps } from '@tabler/icons-react';
+import type { Icon as TablerIcon } from '@tabler/icons-react';
 
 import { navigateTo } from "@/lib/navigateTo";
 
 export interface NavButtonProps {
   active: boolean;
-  icon: React.ComponentType<TablerIconsProps>;
+  icon: TablerIcon;
   label: string;
   action: string;
   disabled?: boolean;

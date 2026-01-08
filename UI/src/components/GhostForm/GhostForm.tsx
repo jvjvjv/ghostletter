@@ -2,11 +2,10 @@
 
 import Form from "next/form";
 import React, { useActionState } from "react";
-import { Stack, Alert } from '@mantine/core';
+import { Stack, Alert, Button } from '@mantine/core';
 import { IconCheck, IconAlertCircle } from '@tabler/icons-react';
 
 import GhostFormField from "@/components/GhostForm/GhostFormField";
-import { Button } from "@/components/ui/button";
 
 export type GhostFormResponse = {
   success: boolean;
