@@ -27,7 +27,7 @@ const NavButton = ({ active, icon, label, action, disabled, tooltip }: NavButton
       title={tooltip || ""}
       data-testid={`nav-button-${action}`}
       style={{
-        width: '33.333%',
+        flex: 1,
         padding: '0.5rem',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
