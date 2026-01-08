@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { Stack, Paper, Title, Text, UnstyledButton, Group, Center, Loader } from '@mantine/core';
+import { notifications } from '@mantine/notifications';
 
 import Avatar from "@/components/Avatar";
 import store from "@/store";
@@ -71,73 +73,81 @@ export default function SendToView() {
         .unwrap();
 
       // Show success notification
-      if (typeof window !== "undefined") {
-        const notification = document.createElement("div");
-        notification.className =
-          "fixed bottom-20 left-0 right-0 mx-auto w-64 bg-green-500 text-white p-4 rounded-lg text-center";
-        notification.style.zIndex = "9999";
-        notification.innerHTML = `<p>Sent to ${friendName}!</p>`;
-        document.body.appendChild(notification);
+      notifications.show({
+        title: 'Success',
+        message: `Sent to ${friendName}!`,
+        color: 'green',
+        autoClose: 2000,
+      });
 
-        // Remove notification and cleanup after 2 seconds
-        setTimeout(() => {
-          notification.remove();
-          // Clear the stored image
-          localStorage.removeItem("ghostLetterLastPhoto");
-          localStorage.removeItem("ghostLetterLastPhotoFile");
-          // Go back to camera view
-          router.push("/main/camera");
-        }, 2000);
-      }
+      // Cleanup after 2 seconds
+      setTimeout(() => {
+        // Clear the stored image
+        localStorage.removeItem("ghostLetterLastPhoto");
+        localStorage.removeItem("ghostLetterLastPhotoFile");
+        // Go back to camera view
+        router.push("/main/camera");
+      }, 2000);
     } catch (error) {
       console.error("Failed to send image:", error);
 
       // Show error notification
-      if (typeof window !== "undefined") {
-        const notification = document.createElement("div");
-        notification.className =
-          "fixed bottom-20 left-0 right-0 mx-auto w-64 bg-red-500 text-white p-4 rounded-lg text-center";
-        notification.style.zIndex = "9999";
-        notification.innerHTML = `<p>Failed to send image. Please try again.</p>`;
-        document.body.appendChild(notification);
-
-        setTimeout(() => {
-          notification.remove();
-        }, 3000);
-      }
+      notifications.show({
+        title: 'Error',
+        message: 'Failed to send image. Please try again.',
+        color: 'red',
+        autoClose: 3000,
+      });
 
       setSending(false);
     }
   };
 
   return (
-    <div className="flex h-svh flex-col bg-white">
-      <header className="border-b border-gray-200 bg-white p-4">
-        <h1 className="text-center text-xl font-semibold">Send To</h1>
-      </header>
-      <main className="flex-1 overflow-y-auto p-4">
+    <Stack gap={0} h="100vh" pos="relative">
+      <Paper shadow="xs" p="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
+        <Title order={1} ta="center" size="h3">Send To</Title>
+      </Paper>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
         {sending ? (
-          <div className="flex h-full items-center justify-center">
-            <p className="text-gray-500">Sending image...</p>
-          </div>
+          <Center h="100%">
+            <Stack align="center" gap="md">
+              <Loader color="secondary" />
+              <Text c="dimmed">Sending image...</Text>
+            </Stack>
+          </Center>
         ) : (
-          <>
-            <p className="mb-2 text-sm text-gray-500">All Friends</p>
-            <div className="space-y-2">
+          <Stack gap="md">
+            <Text size="sm" c="dimmed">All Friends</Text>
+            <Stack gap="xs">
               {friends.map((friend) => (
-                <div
+                <UnstyledButton
                   key={friend.id}
                   onClick={() => sendToFriend(friend.id)}
-                  className="flex w-full cursor-pointer items-center gap-4 rounded-lg p-3 transition hover:bg-gray-50"
+                  style={{
+                    width: '100%',
+                    borderRadius: '8px',
+                    padding: '12px',
+                    transition: 'background-color 0.2s',
+                  }}
+                  styles={{
+                    root: {
+                      '&:hover': {
+                        backgroundColor: 'var(--mantine-color-gray-0)',
+                      },
+                    },
+                  }}
                 >
-                  <Avatar friend={friend} size={10} />
-                  <span>{friend.name}</span>
-                </div>
+                  <Group gap="md">
+                    <Avatar friend={friend} size={10} />
+                    <Text>{friend.name}</Text>
+                  </Group>
+                </UnstyledButton>
               ))}
-            </div>
-          </>
+            </Stack>
+          </Stack>
         )}
-      </main>
-    </div>
+      </div>
+    </Stack>
   );
 }

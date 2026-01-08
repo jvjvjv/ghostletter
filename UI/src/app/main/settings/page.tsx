@@ -2,11 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import React from "react";
+import { Stack, Paper, Title, Center, Text, TextInput, Button } from '@mantine/core';
 
 import Avatar from "@/components/Avatar";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { logoutThunk } from "@/store/authSlice";
 
@@ -22,37 +20,44 @@ export default function SettingsView() {
 
   if (!currentUser) {
     return (
-      <div className="flex h-svh items-center justify-center">
-        <span>Loading...</span>
-      </div>
+      <Center h="100vh">
+        <Text c="dimmed">Loading...</Text>
+      </Center>
     );
   }
 
   return (
-    <div className="flex h-svh flex-col bg-white">
-      <header className="border-b border-gray-200 bg-white p-4">
-        <h1 className="text-center text-xl font-semibold">Settings</h1>
-      </header>
-      <main className="flex flex-1 flex-col items-center overflow-y-auto p-4">
+    <Stack gap={0} h="100vh" pos="relative">
+      <Paper shadow="xs" p="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
+        <Title order={1} ta="center" size="h3">Settings</Title>
+      </Paper>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '1rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <Avatar friend={currentUser} size={24} />
-        <div className="mt-4 w-full max-w-sm space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="name">Name</Label>
-            <Input id="name" type="text" value={currentUser.name} readOnly />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="username">Username</Label>
-            <Input id="username" type="text" value={currentUser.username} readOnly />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={currentUser.email} readOnly />
-          </div>
-        </div>
-        <Button onClick={handleLogout} className="mt-8">
+        <Stack gap="md" mt="md" w="100%" maw={400}>
+          <TextInput
+            label="Name"
+            id="name"
+            value={currentUser.name}
+            readOnly
+          />
+          <TextInput
+            label="Username"
+            id="username"
+            value={currentUser.username}
+            readOnly
+          />
+          <TextInput
+            label="Email"
+            id="email"
+            type="email"
+            value={currentUser.email}
+            readOnly
+          />
+        </Stack>
+        <Button onClick={handleLogout} style={{ marginTop: '2rem' }}>
           Log Out
         </Button>
-      </main>
-    </div>
+      </div>
+    </Stack>
   );
 }
