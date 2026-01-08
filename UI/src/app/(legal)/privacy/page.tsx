@@ -1,78 +1,81 @@
 import React from "react";
+import { Container, Title, Text, List, Alert } from '@mantine/core';
+import { IconInfoCircle } from '@tabler/icons-react';
 
 const Privacy = () => (
-  <main className="page">
-    <h1>Privacy Policy</h1>
+  <Container size="md" py="xl">
+    <Title order={1} mb="xl">Privacy Policy</Title>
 
-    <div className="highlight">
-      <p>
-        <strong>Summary:</strong> For this demo version of GHOSTLETTER, no user data will leave your device. All
+    <Alert icon={<IconInfoCircle size={20} />} color="blue" mb="lg">
+      <Text fw={600}>Summary:</Text>
+      <Text>
+        For this demo version of GHOSTLETTER, no user data will leave your device. All
         information, including photos, messages, and account details, is stored locally on your device.
-      </p>
-    </div>
+      </Text>
+    </Alert>
 
-    <h2>1. Data Collection</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">1. Data Collection</Title>
+    <Text mb="md">
       For this demo version of GHOSTLETTER, no user data will leave your device. All information, including photos,
       messages, and account details, is stored locally on your device and is not transmitted to any external servers or
       third parties.
-    </p>
+    </Text>
 
-    <h2>2. Device Permissions</h2>
-    <p>GHOSTLETTER requires certain permissions to function properly:</p>
-    <ul>
-      <li>Camera access: Required to capture photos</li>
-      <li>Storage access: Required to save photos temporarily on your device</li>
-      <li>Network access: Only for basic app functionality (not used to transmit user data in this demo)</li>
-    </ul>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">2. Device Permissions</Title>
+    <Text mb="sm">GHOSTLETTER requires certain permissions to function properly:</Text>
+    <List mb="sm">
+      <List.Item>Camera access: Required to capture photos</List.Item>
+      <List.Item>Storage access: Required to save photos temporarily on your device</List.Item>
+      <List.Item>Network access: Only for basic app functionality (not used to transmit user data in this demo)</List.Item>
+    </List>
+    <Text mb="md">
       You may revoke these permissions at any time through your device settings, but doing so may impact the
       functionality of the App.
-    </p>
+    </Text>
 
-    <h2>3. Data Storage</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">3. Data Storage</Title>
+    <Text mb="md">
       All content, including photos and messages, is stored locally on your device. Photos are designed to be accessible
       for only 60 seconds after viewing, after which they become inaccessible.
-    </p>
+    </Text>
 
-    <h2>4. User Control</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">4. User Control</Title>
+    <Text mb="md">
       You have full control over your data in this demo app. Since data is stored locally, uninstalling the App will
       remove all associated data from your device.
-    </p>
+    </Text>
 
-    <h2>5. Security</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">5. Security</Title>
+    <Text mb="md">
       While we implement reasonable security measures to protect your data stored locally on your device, please be
       aware that no method of electronic storage is 100% secure. We cannot guarantee absolute security of your data.
-    </p>
+    </Text>
 
-    <h2>6. Children&rsquo;s Privacy</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">6. Children&rsquo;s Privacy</Title>
+    <Text mb="md">
       GHOSTLETTER is not intended for use by individuals under the age of 13. We do not knowingly collect personal
       information from children under 13. If you are a parent or guardian and believe your child has provided personal
       information to us, please contact us.
-    </p>
+    </Text>
 
-    <h2>7. Changes to This Policy</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">7. Changes to This Policy</Title>
+    <Text mb="md">
       We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy
       Policy on this page.
-    </p>
+    </Text>
 
-    <h2>8. Contact Us</h2>
-    <p>If you have any questions about this Privacy Policy, please contact us at privacy@ghostletter.app.</p>
+    <Title order={2} size="h3" mt="lg" mb="sm">8. Contact Us</Title>
+    <Text mb="md">If you have any questions about this Privacy Policy, please contact us at privacy@ghostletter.app.</Text>
 
-    <h2>9. Data Retention</h2>
-    <p>
+    <Title order={2} size="h3" mt="lg" mb="sm">9. Data Retention</Title>
+    <Text mb="md">
       In this demo version, data is retained only for as long as the app is installed on your device. Message and photo
       data is designed to become inaccessible after viewing as specified in the app&rsquo;s functionality.
-    </p>
+    </Text>
 
-    <h2>10. Third Parties</h2>
-    <p>This demo app does not share information with third parties. All data remains on your device.</p>
-  </main>
+    <Title order={2} size="h3" mt="lg" mb="sm">10. Third Parties</Title>
+    <Text mb="md">This demo app does not share information with third parties. All data remains on your device.</Text>
+  </Container>
 );
 
 export default Privacy;
