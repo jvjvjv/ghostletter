@@ -24,7 +24,7 @@ export default function ImageMessageBubble({ message, onImageClick }: ImageMessa
             className="button-submit rounded p-2"
             onClick={() => onImageClick(message.id, message.expiryTimestamp)}
           >
-            Click to view photo
+            View
           </button>
         </div>
       ) : isViewing && message.imageUrl ? (

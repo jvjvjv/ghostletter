@@ -23,6 +23,7 @@ return [
 
     'allowed_origins_patterns' => [
         '/.+localhost.+/',
+        '/.+ghostletter.+/',
     ],
 
     'allowed_headers' => ['*'],
