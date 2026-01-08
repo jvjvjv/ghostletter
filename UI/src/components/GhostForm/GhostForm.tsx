@@ -2,6 +2,8 @@
 
 import Form from "next/form";
 import React, { useActionState } from "react";
+import { Stack, Alert } from '@mantine/core';
+import { IconCheck, IconAlertCircle } from '@tabler/icons-react';
 
 import GhostFormField from "@/components/GhostForm/GhostFormField";
 import { Button } from "@/components/ui/button";
@@ -44,27 +46,42 @@ const defaultState: GhostFormResponse = {
 
 const GhostForm = ({ action, fields, submitText }: IForm) => {
   const [state, stateAction, isPending] = useActionState(action, defaultState);
+
   return (
-    <Form action={stateAction} className="my-4 flex w-full max-w-sm flex-col items-center justify-center gap-4">
-      {fields.map((field) => (
-        <GhostFormField
-          key={field.name}
-          {...field}
-          defaultValue={(state.fields?.[field.name] as typeof field.defaultValue) ?? field.defaultValue}
-        />
-      ))}
-      <Button type="submit" className="w-full" disabled={isPending}>
-        {submitText ?? "Submit"}
-      </Button>
-      {isPending ? (
-        <div className="rounded border border-blue-400 bg-blue-50 p-2 text-blue-700">Logging in . . . .</div>
-      ) : state.message && !state.success ? (
-        <div className="rounded border border-red-500 bg-red-100 p-2 text-red-700">{state.message}</div>
-      ) : state.message && state.success ? (
-        <div className="rounded border border-green-500 bg-green-100 p-2 text-green-700">{state.message}</div>
-      ) : (
-        <div className="invisible rounded p-2 text-gray-700">&nbsp;</div>
-      )}
+    <Form action={stateAction}>
+      <Stack gap="md" maw={420} w="100%" align="center">
+        {fields.map((field) => (
+          <GhostFormField
+            key={field.name}
+            {...field}
+            defaultValue={(state.fields?.[field.name] as typeof field.defaultValue) ?? field.defaultValue}
+          />
+        ))}
+        <Button type="submit" fullWidth disabled={isPending}>
+          {submitText ?? "Submit"}
+        </Button>
+
+        {/* Loading state */}
+        {isPending && (
+          <Alert color="blue" title="Processing" icon={<IconAlertCircle />}>
+            Logging in...
+          </Alert>
+        )}
+
+        {/* Error state */}
+        {!isPending && state.message && !state.success && (
+          <Alert color="red" icon={<IconAlertCircle />} role="alert">
+            {state.message}
+          </Alert>
+        )}
+
+        {/* Success state */}
+        {!isPending && state.message && state.success && (
+          <Alert color="green" icon={<IconCheck />} role="alert">
+            {state.message}
+          </Alert>
+        )}
+      </Stack>
     </Form>
   );
 };

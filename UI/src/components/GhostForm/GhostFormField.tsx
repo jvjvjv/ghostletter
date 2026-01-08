@@ -1,8 +1,7 @@
+import { TextInput, Textarea, Select, Switch } from '@mantine/core';
+import { DateInput } from '@mantine/dates';
+
 import type { GhostFormField as FormField } from "@/components/GhostForm/GhostForm";
-
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
 
 const GhostFormField = ({
   type,
@@ -21,93 +20,71 @@ const GhostFormField = ({
     case "email":
     case "password":
       return (
-        <div className="w-full space-y-2">
-          {label ? <Label htmlFor={name}>{label}</Label> : null}
-          <Input
-            id={name}
-            type={type}
-            name={name}
-            placeholder={placeholder}
-            autoComplete={autoComplete}
-            defaultValue={(defaultValue as string) || ""}
-            required={required}
-            disabled={disabled}
-            aria-invalid={!!error}
-            title={error}
-          />
-          {error && <p className="text-sm text-red-600">{error}</p>}
-        </div>
+        <TextInput
+          type={type}
+          name={name}
+          label={label}
+          placeholder={placeholder}
+          autoComplete={autoComplete}
+          defaultValue={(defaultValue as string) || ""}
+          required={required}
+          disabled={disabled}
+          error={error}
+          w="100%"
+        />
       );
 
     case "textarea":
       return (
-        <div className="w-full space-y-2">
-          <Label htmlFor={name}>{label}</Label>
-          <textarea
-            id={name}
-            name={name}
-            placeholder={placeholder}
-            defaultValue={(defaultValue as string) || ""}
-            required={required}
-            disabled={disabled}
-            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 min-h-20 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          {error && <p className="text-sm text-red-600">{error}</p>}
-        </div>
+        <Textarea
+          name={name}
+          label={label}
+          placeholder={placeholder}
+          defaultValue={(defaultValue as string) || ""}
+          required={required}
+          disabled={disabled}
+          error={error}
+          minRows={3}
+          w="100%"
+        />
       );
 
     case "select":
       return (
-        <div className="w-full space-y-2">
-          <Label htmlFor={name}>{label}</Label>
-          <select
-            id={name}
-            name={name}
-            defaultValue={(defaultValue as string) || ""}
-            required={required}
-            disabled={disabled}
-            className="border-input focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {options?.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          {error && <p className="text-sm text-red-600">{error}</p>}
-        </div>
+        <Select
+          name={name}
+          label={label}
+          data={options?.map(opt => ({ value: opt.value, label: opt.label })) || []}
+          defaultValue={(defaultValue as string) || ""}
+          required={required}
+          disabled={disabled}
+          error={error}
+          w="100%"
+        />
       );
 
     case "switch":
       return (
-        <div className="flex items-center space-x-2">
-          <input
-            id={name}
-            type="checkbox"
-            name={name}
-            defaultChecked={defaultValue as boolean}
-            required={required}
-            disabled={disabled}
-            className="border-input h-4 w-4 rounded disabled:cursor-not-allowed disabled:opacity-50"
-          />
-          <Label htmlFor={name}>{label}</Label>
-        </div>
+        <Switch
+          name={name}
+          label={label}
+          defaultChecked={defaultValue as boolean}
+          required={required}
+          disabled={disabled}
+        />
       );
 
     case "date":
       return (
-        <div className="w-full space-y-2">
-          <Label htmlFor={name}>{label}</Label>
-          <Input
-            id={name}
-            type="date"
-            name={name}
-            defaultValue={(defaultValue as string) || ""}
-            required={required}
-            disabled={disabled}
-          />
-          {error && <p className="text-sm text-red-600">{error}</p>}
-        </div>
+        <DateInput
+          name={name}
+          label={label}
+          defaultValue={defaultValue ? new Date(defaultValue as string) : undefined}
+          required={required}
+          disabled={disabled}
+          error={error}
+          w="100%"
+        />
       );
 
     default:

@@ -1,35 +1,75 @@
 "use client";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { UnstyledButton, Stack, Text } from '@mantine/core';
 import React from "react";
-
-import type { IconProp } from "@fortawesome/fontawesome-svg-core";
+import type { TablerIconsProps } from '@tabler/icons-react';
 
 import { navigateTo } from "@/lib/navigateTo";
-// import { IconDefinition } from "@fortawesome/free-regular-svg-icons";
+
 export interface NavButtonProps {
   active: boolean;
-  icon: IconProp;
+  icon: React.ComponentType<TablerIconsProps>;
   label: string;
   action: string;
   disabled?: boolean;
   tooltip?: string;
 }
 
-const NavButton = ({ active, icon, label, action, disabled, tooltip }: NavButtonProps) => (
-  <button
-    onClick={() => navigateTo(action)}
-    className={`flex w-1/3 flex-col items-center justify-center p-2 ${active ? "text-indigo-500" : "text-gray-400"} ${disabled ? "cursor-not-allowed" : "cursor-pointer"}`}
-    disabled={disabled}
-    title={tooltip || ""}
-  >
-    <div
-      className={`flex h-10 w-10 items-center justify-center rounded-full ${active ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-500"} ${disabled ? "" : "transition hover:scale-110 hover:bg-gray-300"}`}
+const NavButton = ({ active, icon: Icon, label, action, disabled, tooltip }: NavButtonProps) => {
+  const activeColor = 'var(--mantine-color-secondary-5)'; // Secondary color (replaces indigo-500)
+  const inactiveColor = 'var(--mantine-color-gray-4)'; // Gray (replaces gray-400)
+  const activeBg = 'var(--mantine-color-secondary-5)';
+  const inactiveBg = 'var(--mantine-color-gray-2)';
+
+  return (
+    <UnstyledButton
+      onClick={() => navigateTo(action)}
+      disabled={disabled}
+      title={tooltip || ""}
+      data-testid={`nav-button-${action}`}
+      style={{
+        width: '33.333%',
+        padding: '0.5rem',
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        opacity: disabled ? 0.5 : 1,
+      }}
     >
-      <FontAwesomeIcon icon={icon} size="lg" />
-    </div>
-    {label ? '<span className="mt-1 text-xs">{label}</span>' : null}
-  </button>
-);
+      <Stack gap="xs" align="center">
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '40px',
+            height: '40px',
+            borderRadius: '50%',
+            backgroundColor: active ? activeBg : inactiveBg,
+            color: active ? 'white' : inactiveColor,
+            transition: disabled ? 'none' : 'transform 0.2s, background-color 0.2s',
+          }}
+          onMouseEnter={(e) => {
+            if (!disabled && !active) {
+              e.currentTarget.style.transform = 'scale(1.1)';
+              e.currentTarget.style.backgroundColor = 'var(--mantine-color-gray-3)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!disabled) {
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.backgroundColor = active ? activeBg : inactiveBg;
+            }
+          }}
+        >
+          <Icon size={20} />
+        </div>
+        {label && (
+          <Text size="xs" c={active ? activeColor : inactiveColor}>
+            {label}
+          </Text>
+        )}
+      </Stack>
+    </UnstyledButton>
+  );
+};
 
 export default NavButton;
