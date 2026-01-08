@@ -1,18 +1,16 @@
-import React from "react";
-import { Container, Title, Text, List, Alert } from '@mantine/core';
-import { IconInfoCircle } from '@tabler/icons-react';
+import { Container, Title, Text } from '@mantine/core';
 
 const Privacy = () => (
   <Container size="md" py="xl">
     <Title order={1} mb="xl">Privacy Policy</Title>
 
-    <Alert icon={<IconInfoCircle size={20} />} color="blue" mb="lg">
-      <Text fw={600}>Summary:</Text>
+    <div style={{ padding: '1rem', backgroundColor: 'var(--mantine-color-blue-0)', borderRadius: '8px', marginBottom: '1.5rem' }}>
+      <Text fw={600} mb="xs">Summary:</Text>
       <Text>
         For this demo version of GHOSTLETTER, no user data will leave your device. All
         information, including photos, messages, and account details, is stored locally on your device.
       </Text>
-    </Alert>
+    </div>
 
     <Title order={2} size="h3" mt="lg" mb="sm">1. Data Collection</Title>
     <Text mb="md">
@@ -23,11 +21,11 @@ const Privacy = () => (
 
     <Title order={2} size="h3" mt="lg" mb="sm">2. Device Permissions</Title>
     <Text mb="sm">GHOSTLETTER requires certain permissions to function properly:</Text>
-    <List mb="sm">
-      <List.Item>Camera access: Required to capture photos</List.Item>
-      <List.Item>Storage access: Required to save photos temporarily on your device</List.Item>
-      <List.Item>Network access: Only for basic app functionality (not used to transmit user data in this demo)</List.Item>
-    </List>
+    <ul style={{ marginBottom: '1rem' }}>
+      <li>Camera access: Required to capture photos</li>
+      <li>Storage access: Required to save photos temporarily on your device</li>
+      <li>Network access: Only for basic app functionality (not used to transmit user data in this demo)</li>
+    </ul>
     <Text mb="md">
       You may revoke these permissions at any time through your device settings, but doing so may impact the
       functionality of the App.

@@ -2,20 +2,19 @@
 
 import { UnstyledButton, Stack, Text } from '@mantine/core';
 import React from "react";
-import type { Icon as TablerIcon } from '@tabler/icons-react';
 
 import { navigateTo } from "@/lib/navigateTo";
 
 export interface NavButtonProps {
   active: boolean;
-  icon: TablerIcon;
+  icon: React.ReactNode;
   label: string;
   action: string;
   disabled?: boolean;
   tooltip?: string;
 }
 
-const NavButton = ({ active, icon: Icon, label, action, disabled, tooltip }: NavButtonProps) => {
+const NavButton = ({ active, icon, label, action, disabled, tooltip }: NavButtonProps) => {
   const activeColor = 'var(--mantine-color-secondary-5)'; // Secondary color (replaces indigo-500)
   const inactiveColor = 'var(--mantine-color-gray-4)'; // Gray (replaces gray-400)
   const activeBg = 'var(--mantine-color-secondary-5)';
@@ -60,7 +59,7 @@ const NavButton = ({ active, icon: Icon, label, action, disabled, tooltip }: Nav
             }
           }}
         >
-          <Icon size={20} />
+          {icon}
         </div>
         {label && (
           <Text size="xs" c={active ? activeColor : inactiveColor}>

@@ -1,5 +1,4 @@
-import React from "react";
-import { Container, Title, Text, List, Anchor } from '@mantine/core';
+import { Container, Title, Text, Anchor } from '@mantine/core';
 
 const Terms = () => (
   <Container size="md" py="xl">
@@ -14,17 +13,17 @@ const Terms = () => (
 
     <Title order={2} size="h3" mt="lg" mb="sm">2. Prohibited Uses</Title>
     <Text mb="sm">The App shall not be used for illegal purposes under any circumstances. You agree not to use the App to:</Text>
-    <List mb="md">
-      <List.Item>Violate any applicable local, state, national, or international law or regulation</List.Item>
-      <List.Item>Harass, threaten, or intimidate any person</List.Item>
-      <List.Item>Impersonate any person or entity</List.Item>
-      <List.Item>
+    <ul style={{ marginBottom: '1rem' }}>
+      <li>Violate any applicable local, state, national, or international law or regulation</li>
+      <li>Harass, threaten, or intimidate any person</li>
+      <li>Impersonate any person or entity</li>
+      <li>
         Transmit any content that is unlawful, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, or
         otherwise objectionable
-      </List.Item>
-      <List.Item>Distribute malware, viruses, or any other malicious code</List.Item>
-      <List.Item>Interfere with or disrupt the App or servers connected to the App</List.Item>
-    </List>
+      </li>
+      <li>Distribute malware, viruses, or any other malicious code</li>
+      <li>Interfere with or disrupt the App or servers connected to the App</li>
+    </ul>
 
     <Title order={2} size="h3" mt="lg" mb="sm">3. Content Policy</Title>
     <Text mb="md">

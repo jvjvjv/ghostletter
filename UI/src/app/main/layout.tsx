@@ -28,16 +28,16 @@ export default function RootLayout({
         <Group gap={0} justify="space-around" align="center" h="100%">
           <NavButton
             active={false}
-            icon={IconMapPin}
+            icon={<IconMapPin size={20} />}
             label=""
             action="/main/chat"
             disabled
             tooltip="Share your location: Disabled for this demo"
           />
-          <NavButton active={false} icon={IconMessages} label="" action="/main/chat" tooltip="Chats" />
-          <NavButton active={false} icon={IconCamera} label="" action="/main/camera" tooltip="Camera" />
-          <NavButton active={false} icon={IconUsers} label="" action="/main/chat" disabled tooltip="Your Stories" />
-          <NavButton active={false} icon={IconSettings} label="" action="/main/settings" tooltip="Settings" />
+          <NavButton active={false} icon={<IconMessages size={20} />} label="" action="/main/chat" tooltip="Chats" />
+          <NavButton active={false} icon={<IconCamera size={20} />} label="" action="/main/camera" tooltip="Camera" />
+          <NavButton active={false} icon={<IconUsers size={20} />} label="" action="/main/chat" disabled tooltip="Your Stories" />
+          <NavButton active={false} icon={<IconSettings size={20} />} label="" action="/main/settings" tooltip="Settings" />
         </Group>
       </Paper>
     </>
