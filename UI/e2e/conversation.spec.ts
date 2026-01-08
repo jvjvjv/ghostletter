@@ -9,7 +9,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should display conversation header with friend name", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -24,7 +24,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should display messages in conversation", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -33,7 +33,7 @@ test.describe("Conversation View", () => {
       await page.waitForTimeout(2000);
 
       // Check for messages or loading state
-      const hasMessages = (await page.locator(".space-y-4 > div").count()) > 0;
+      const hasMessages = (await page.locator('[data-testid="message-item"]').count()) > 0;
       const isLoading = await page
         .getByText(/loading messages/i)
         .isVisible()
@@ -44,7 +44,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should differentiate sent vs received messages", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -52,22 +52,22 @@ test.describe("Conversation View", () => {
       await page.waitForURL(/\/main\/chat\/\d+/);
       await page.waitForTimeout(2000);
 
-      // Check for different styling - sent messages use bg-indigo-500
-      const sentMessages = page.locator(".bg-indigo-500.text-white");
-      const receivedMessages = page.locator(".bg-white.border-gray-200");
+      // Check for different styling - sent messages use secondary color, received use white
+      const sentMessages = page.locator('[data-testid="message-item"]').filter({ has: page.locator('[style*="secondary"]') });
+      const receivedMessages = page.locator('[data-testid="message-item"]').filter({ has: page.locator('[style*="white"]') });
 
       const sentCount = await sentMessages.count();
       const receivedCount = await receivedMessages.count();
 
       // At least one type of message should exist if conversation has messages
-      if ((await page.locator(".space-y-4 > div").count()) > 0) {
+      if ((await page.locator('[data-testid="message-item"]').count()) > 0) {
         expect(sentCount + receivedCount).toBeGreaterThanOrEqual(0);
       }
     }
   });
 
   test("should have message input field", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -80,7 +80,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should have send button", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -93,7 +93,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should disable send button when input is empty", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -110,7 +110,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should enable send button when message is typed", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -127,7 +127,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should send text message", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -162,7 +162,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should send message on Enter key", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -182,7 +182,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should have camera button in footer", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -195,7 +195,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should navigate to camera when camera button clicked", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -210,7 +210,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should navigate back to chat list when back button clicked", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -225,7 +225,7 @@ test.describe("Conversation View", () => {
   });
 
   test("should display message timestamps", async ({ page }) => {
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator("[data-testid="chat-preview-item"]");
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -233,12 +233,12 @@ test.describe("Conversation View", () => {
       await page.waitForURL(/\/main\/chat\/\d+/);
       await page.waitForTimeout(2000);
 
-      // Check for timestamp elements
-      const timestamps = page.locator(".text-xs.text-indigo-200, .text-xs.text-gray-500");
+      // Check for timestamp elements (Mantine Text with size="xs")
+      const timestamps = page.locator('[data-testid="message-item"] >> text=/\\d{1,2}:\\d{2}/');
       const timestampCount = await timestamps.count();
 
       // If there are messages, there should be timestamps
-      const messageCount = await page.locator(".space-y-4 > div").count();
+      const messageCount = await page.locator('[data-testid="message-item"]').count();
       if (messageCount > 0) {
         expect(timestampCount).toBeGreaterThan(0);
       }

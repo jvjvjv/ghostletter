@@ -90,7 +90,7 @@ test.describe("Navigation", () => {
     await page.goto("/main/chat");
     await page.waitForTimeout(2000);
 
-    const chatItems = page.locator(".divide-y > div");
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {

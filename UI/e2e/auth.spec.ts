@@ -46,7 +46,7 @@ test.describe('User Authentication', () => {
 
     // Wait for error message to appear (could be various messages)
     await page.waitForTimeout(1000);
-    const hasError = await page.locator('div.border-red-500, div.text-red').isVisible().catch(() => false);
+    const hasError = await page.locator('[role="alert"]').isVisible().catch(() => false);
 
     expect(hasError).toBeTruthy();
 
