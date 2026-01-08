@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import React, { useRef, useState, useEffect, useCallback } from "react";
+import { Stack, Alert, ActionIcon, Group, Button } from '@mantine/core';
+import { IconX, IconCheck, IconRefresh } from '@tabler/icons-react';
 
 export default function CameraView() {
   const router = useRouter();
@@ -56,7 +58,7 @@ export default function CameraView() {
     };
     // Keep the dependency array empty to run this effect only once during mount,
     // otherwise it will run on every render.
-     
+
   }, []);
 
   const capturePhoto = () => {
@@ -94,66 +96,75 @@ export default function CameraView() {
 
   /* eslint-disable @next/next/no-img-element */
   return (
-    <div className="flex h-svh flex-col bg-black">
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', backgroundColor: 'black' }}>
       {/* Main Content Area */}
-      <main className="relative flex flex-1 flex-col overflow-hidden">
+      <main style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {error ? (
-          <div className="flex flex-1 items-center justify-center p-6 text-center">
-            <div className="rounded border-l-4 border-red-500 bg-red-100 p-4 text-red-700">
-              <p>{error}</p>
-              <button onClick={void startCamera} className="mt-4 rounded bg-indigo-500 px-4 py-2 text-white">
+          <Stack align="center" justify="center" h="100%" p="xl">
+            <Alert color="red" title="Camera Error" icon={<IconX />}>
+              {error}
+              <Button onClick={void startCamera} mt="md" leftSection={<IconRefresh />}>
                 Try Again
-              </button>
-            </div>
-          </div>
+              </Button>
+            </Alert>
+          </Stack>
         ) : capturedImage ? (
           // Photo confirmation view
-          <div className="relative flex flex-1 flex-col items-center justify-center">
-            <div className="relative h-full w-full">
-              <img src={capturedImage} alt="Captured" className="h-full w-full object-contain" />
-              <div className="absolute right-0 bottom-32 left-0 flex justify-center space-x-12 px-6">
-                <button
+          <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+              <img src={capturedImage} alt="Captured" style={{ height: '100%', width: '100%', objectFit: 'contain' }} />
+              <Group gap="xl" style={{ position: 'absolute', bottom: '128px', left: 0, right: 0, justifyContent: 'center' }}>
+                <ActionIcon
                   onClick={discardPhoto}
-                  className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500 text-2xl text-white shadow-lg"
+                  size={64}
+                  radius="xl"
+                  color="red"
+                  variant="filled"
                 >
-                  ✕
-                </button>
+                  <IconX size={32} />
+                </ActionIcon>
 
-                <button
+                <ActionIcon
                   onClick={proceedToSendPhoto}
-                  className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500 text-2xl text-white shadow-lg"
+                  size={64}
+                  radius="xl"
+                  color="green"
+                  variant="filled"
                 >
-                  ✓
-                </button>
-              </div>
+                  <IconCheck size={32} />
+                </ActionIcon>
+              </Group>
             </div>
           </div>
         ) : (
           // Camera view
-          <div className="relative flex flex-1 flex-col items-center justify-center">
+          <div style={{ position: 'relative', flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             {/* Video element for camera preview */}
             <video
               ref={videoRef}
               autoPlay
               playsInline
               muted
-              className="h-full w-full scale-x-[-1] transform object-cover"
+              style={{ height: '100%', width: '100%', objectFit: 'cover', transform: 'scaleX(-1)' }}
               onCanPlay={() => setCameraReady(true)}
             />
 
             {/* Hidden canvas for capturing frames */}
-            <canvas ref={canvasRef} className="hidden" />
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
 
             {/* Capture button */}
             {isCameraReady && (
-              <div className="absolute right-0 bottom-32 left-0 flex justify-center">
-                <button
+              <div style={{ position: 'absolute', bottom: '128px', left: 0, right: 0, display: 'flex', justifyContent: 'center' }}>
+                <ActionIcon
                   onClick={capturePhoto}
-                  className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-gray-300 bg-white shadow-lg"
+                  size={80}
+                  radius="xl"
+                  variant="white"
+                  style={{ border: '4px solid white' }}
                   aria-label="Take photo"
                 >
-                  <div className="h-16 w-16 rounded-full bg-white"></div>
-                </button>
+                  <div style={{ width: '64px', height: '64px', borderRadius: '50%', backgroundColor: 'white' }} />
+                </ActionIcon>
               </div>
             )}
           </div>
