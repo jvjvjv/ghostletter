@@ -7,10 +7,10 @@ The frontend for Ghost Letter - an ephemeral messaging platform built with Next.
 - **Framework**: Next.js 16 (App Router)
 - **React**: 19.0
 - **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 4
+- **Styling**: Mantine UI Component Library
 - **State Management**: Redux Toolkit
 - **HTTP Client**: Native Fetch API
-- **Forms**: React Hook Form + Zod
+- **Forms**: Mantine Forms
 - **Testing**: Playwright (E2E)
 - **Dev Server**: Turbopack
 
@@ -35,8 +35,7 @@ UI/
 │   │   └── user.ts            # User profile API
 │   ├── components/            # React components
 │   │   ├── Avatar.tsx
-│   │   ├── GhostForm/         # Form component
-│   │   └── ui/                # shadcn/ui components
+│   │   └── GhostForm/         # Form component
 │   ├── lib/                   # Utilities
 │   │   └── apiConfig.ts       # API configuration
 │   ├── store/                 # Redux state management
@@ -177,17 +176,19 @@ Redux Toolkit manages application state with the following slices:
 
 ## 🎨 Styling
 
-The app uses **Tailwind CSS 4** with:
-- Custom theme configuration
-- shadcn/ui components
-- Tailwind Animate for animations
-- PostCSS compilation
+The app uses **Mantine UI Component Library** with:
+- Pre-built accessible components (Button, TextInput, Modal, etc.)
+- Built-in theming system with CSS variables
+- Responsive design utilities
+- Hooks for common UI patterns (useDisclosure, useMediaQuery, etc.)
+- Form management with validation
 
 ### Adding New Styles
 
-1. Use Tailwind utility classes in components
-2. For complex components, use `cn()` helper from `lib/utils`
-3. Global styles in `app/globals.css`
+1. Use Mantine components for UI elements (`<Button>`, `<TextInput>`, etc.)
+2. Apply Mantine's style props for customization
+3. Use the `sx` prop for custom CSS-in-JS styling
+4. Global theme configuration in MantineProvider
 
 ## 🧪 Testing
 

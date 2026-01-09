@@ -58,7 +58,9 @@ export default function CameraView() {
     };
     // Keep the dependency array empty to run this effect only once during mount,
     // otherwise it will run on every render.
-
+    // TODO: Figure out how to gracefully turn the camera off and back on whenever
+    // users leave this page. Previous implementation took seconds to turn on the
+    // camera each time the page mounted again.
   }, []);
 
   const capturePhoto = () => {

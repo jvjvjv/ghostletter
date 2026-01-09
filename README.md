@@ -16,7 +16,7 @@ ghostletter/
 ### UI (Frontend)
 
 - **Framework**: Next.js 16 with React 19
-- **Styling**: Tailwind CSS 4
+- **Styling**: Mantine UI Component Library
 - **State Management**: Redux Toolkit
 - **API Client**: Native Fetch with automatic token injection
 - **Testing**: Playwright E2E tests

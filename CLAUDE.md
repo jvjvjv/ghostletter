@@ -7,14 +7,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 1. **Photo Preview**: "Click to view photo" should display a blurred version of the photo instead of placeholder text.
 2. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
 3. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
-4. **Switch Component Library**: Replace Tailwind with something cooler, like [Mantine](https://mantine.dev/)!
-5. **Turn off camera when not on Camera page**: Right now the camera stays on even when navigating away from the Camera page, wasting resources, battery, and probably causing privacy concerns.
+4. **Turn off camera when not on Camera page**: Right now the camera stays on even when navigating away from the Camera page, wasting resources, battery, and probably causing privacy concerns.
 
 ## Project Overview
 
 Ghost Letter is an ephemeral messaging platform (similar to Snapchat) built as a pnpm monorepo with:
 
-- **UI**: Next.js 16 frontend with React 19, Tailwind CSS 4, and Redux Toolkit
+- **UI**: Next.js 16 frontend with React 19, Mantine UI component library, and Redux Toolkit
 - **API**: Laravel 12 backend with Sanctum authentication and RESTful API
 
 ## Development Commands
@@ -165,7 +164,7 @@ See `API/routes/api.php` for complete route definitions.
 ## Key Technical Details
 
 - **Next.js**: Uses Turbopack for dev server, experimental view transitions enabled
-- **Tailwind CSS**: v4 with PostCSS compilation
+- **Mantine**: Component library with built-in theming, hooks, and form management
 - **Laravel**: v12 with PHP 8.4+, uses SQLite for testing (in-memory)
 - **Testing**: PHPUnit for API tests (Feature and Unit suites)
 - **Image Handling**: Laravel storage with symbolic link, Next.js Image component with remote patterns
