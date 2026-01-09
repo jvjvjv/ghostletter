@@ -15,7 +15,7 @@ test.describe('Chat List', () => {
     await page.waitForTimeout(2000);
 
     // Either shows chats or empty state
-    const hasChatItems = await page.locator('.divide-y > div').count() > 0;
+    const hasChatItems = await page.locator('[data-testid="chat-preview-item"]').count() > 0;
     const hasEmptyState = await page.getByText(/no chats yet/i).isVisible().catch(() => false);
 
     expect(hasChatItems || hasEmptyState).toBeTruthy();
@@ -38,7 +38,7 @@ test.describe('Chat List', () => {
 
     // Check if empty state or chats are shown
     const hasEmptyState = await page.getByText(/no chats yet/i).isVisible().catch(() => false);
-    const hasChats = await page.locator('.divide-y > div').count() > 0;
+    const hasChats = await page.locator('[data-testid="chat-preview-item"]').count() > 0;
 
     // Either one should be true
     expect(hasEmptyState || hasChats).toBeTruthy();
@@ -52,7 +52,7 @@ test.describe('Chat List', () => {
   test('should navigate to conversation on click', async ({ page }) => {
     await page.waitForTimeout(2000);
 
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -68,12 +68,12 @@ test.describe('Chat List', () => {
     await page.waitForTimeout(2000);
 
     // Check if there are any chats
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
-      // Look for unread indicators (blue dot or emoji)
-      const hasUnreadIndicator = await page.locator('.bg-indigo-500').count() > 0 ||
+      // Look for unread indicators (Badge or emoji)
+      const hasUnreadIndicator = await page.locator('[class*="mantine-Badge"]').count() > 0 ||
         await page.getByText('📸').isVisible().catch(() => false);
 
       // This test just verifies the structure exists, not necessarily that there are unread messages
@@ -84,12 +84,12 @@ test.describe('Chat List', () => {
   test('should truncate long message previews', async ({ page }) => {
     await page.waitForTimeout(2000);
 
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
       // Check that message previews exist and are truncated with ellipsis
-      const previewText = await page.locator('.text-sm.text-gray-600').first().textContent();
+      const previewText = await page.locator('[data-testid="chat-preview-item"] >> text=/./').first().textContent();
 
       if (previewText && previewText.length > 43) {
         expect(previewText).toContain('...');
@@ -100,12 +100,12 @@ test.describe('Chat List', () => {
   test('should sort conversations by latest message', async ({ page }) => {
     await page.waitForTimeout(2000);
 
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 1) {
-      // Get timestamps from chat items
-      const timestamps = await page.locator('.text-xs.text-gray-500').allTextContents();
+      // Get timestamps from chat items (using Mantine Text with c="dimmed")
+      const timestamps = await page.locator('[data-testid="chat-preview-item"]').allTextContents();
 
       // Verify timestamps exist (sorted by recency is handled by the app)
       expect(timestamps.length).toBeGreaterThan(0);
@@ -115,7 +115,7 @@ test.describe('Chat List', () => {
   test('should display friend avatars with initials', async ({ page }) => {
     await page.waitForTimeout(2000);
 
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {

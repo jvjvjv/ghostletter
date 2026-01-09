@@ -37,12 +37,12 @@ test.describe('Camera View', () => {
   test('should show capture button when camera is ready', async ({ page }) => {
     await page.waitForTimeout(2000);
 
-    // Look for capture button (white circle button)
+    // Look for capture button (Mantine ActionIcon, large white circle)
     const captureButton = page.getByRole('button', { name: /take photo/i });
     const captureButtonVisible = await captureButton.isVisible().catch(() => false);
 
-    // Or check for the visual capture button
-    const visualCaptureButton = page.locator('button.rounded-full.bg-white').filter({ has: page.locator('.rounded-full') });
+    // Or check for the visual capture button (ActionIcon with size={80})
+    const visualCaptureButton = page.locator('[class*="mantine-ActionIcon"]').filter({ hasNot: page.locator('svg') });
     const visualVisible = await visualCaptureButton.count() > 0;
 
     // If camera isn't available, neither button will show
@@ -53,8 +53,8 @@ test.describe('Camera View', () => {
 
   test('should show error when permission denied', async ({ page, context }) => {
     // This test specifically checks the error state
-    // The error div should have specific styling
-    const errorBox = page.locator('.border-red-500, .bg-red-100');
+    // The error should be shown as Mantine Alert with role="alert"
+    const errorBox = page.locator('[role="alert"]');
     const hasError = await errorBox.count() > 0 ||
       await page.getByText(/could not access camera/i).isVisible().catch(() => false);
 
@@ -82,7 +82,7 @@ test.describe('Camera View', () => {
     if (videoVisible) {
       // Find and click capture button
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
@@ -104,7 +104,7 @@ test.describe('Camera View', () => {
 
     if (videoVisible) {
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
@@ -126,7 +126,7 @@ test.describe('Camera View', () => {
 
     if (videoVisible) {
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
@@ -134,8 +134,8 @@ test.describe('Camera View', () => {
         await page.waitForTimeout(500);
 
         // Should show confirm (green) and discard (red) buttons
-        const confirmButton = page.locator('button.bg-green-500');
-        const discardButton = page.locator('button.bg-red-500');
+        const confirmButton = page.locator('[class*="mantine-ActionIcon"][color="green"]');
+        const discardButton = page.locator('[class*="mantine-ActionIcon"][color="red"]');
 
         await expect(confirmButton).toBeVisible({ timeout: 3000 });
         await expect(discardButton).toBeVisible({ timeout: 3000 });
@@ -151,7 +151,7 @@ test.describe('Camera View', () => {
 
     if (videoVisible) {
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
@@ -159,7 +159,7 @@ test.describe('Camera View', () => {
         await page.waitForTimeout(500);
 
         // Click discard (red X button)
-        const discardButton = page.locator('button.bg-red-500');
+        const discardButton = page.locator('[class*="mantine-ActionIcon"][color="red"]');
         await discardButton.click();
         await page.waitForTimeout(1000);
 
@@ -177,7 +177,7 @@ test.describe('Camera View', () => {
 
     if (videoVisible) {
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
@@ -185,7 +185,7 @@ test.describe('Camera View', () => {
         await page.waitForTimeout(500);
 
         // Click confirm (green checkmark button)
-        const confirmButton = page.locator('button.bg-green-500');
+        const confirmButton = page.locator('[class*="mantine-ActionIcon"][color="green"]');
         await confirmButton.click();
 
         // Should navigate to send-to page
@@ -202,14 +202,14 @@ test.describe('Camera View', () => {
 
     if (videoVisible) {
       const captureButton = page.locator('button[aria-label="Take photo"]').or(
-        page.locator('button.rounded-full.border-gray-300')
+        page.locator('[class*="mantine-ActionIcon"]')
       );
 
       if (await captureButton.count() > 0) {
         await captureButton.first().click();
         await page.waitForTimeout(500);
 
-        const confirmButton = page.locator('button.bg-green-500');
+        const confirmButton = page.locator('[class*="mantine-ActionIcon"][color="green"]');
         await confirmButton.click();
         await page.waitForTimeout(500);
 

@@ -8,6 +8,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 2. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
 3. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
 4. **Switch Component Library**: Replace Tailwind with something cooler, like [Mantine](https://mantine.dev/)!
+5. **Turn off camera when not on Camera page**: Right now the camera stays on even when navigating away from the Camera page, wasting resources, battery, and probably causing privacy concerns.
 
 ## Project Overview
 

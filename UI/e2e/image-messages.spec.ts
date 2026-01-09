@@ -8,7 +8,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should display "Click to view photo" for unviewed images', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -28,7 +28,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should show image on click', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -52,7 +52,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should start countdown timer on first view', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -81,7 +81,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should show countdown in seconds', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -102,7 +102,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should update countdown every second', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -138,7 +138,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should blur expired images', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -160,7 +160,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should show "Expired" label on expired images', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -180,7 +180,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should show photo unavailable for missing images', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {
@@ -198,7 +198,7 @@ test.describe('Image Messages', () => {
   });
 
   test('should display image with proper dimensions', async ({ page }) => {
-    const chatItems = page.locator('.divide-y > div');
+    const chatItems = page.locator('[data-testid="chat-preview-item"]');
     const count = await chatItems.count();
 
     if (count > 0) {

@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import * as z from "zod";
+import { Container, Title, Text, Anchor, Center } from '@mantine/core';
 
 import type { GhostFormResponse } from "@/components/GhostForm/GhostForm";
 
@@ -64,11 +64,11 @@ const SignIn = () => {
   };
 
   return (
-    <main className="page page-center">
-      <div className="mb-2 flex h-80 w-80 items-center justify-center self-center rounded-full text-center">
+    <Container h="100vh" display="flex" style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <Center mb="md">
         <Image priority src="/ghostletter-circle.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
-      </div>
-      <h1 className="font-bold">Sign In</h1>
+      </Center>
+      <Title order={1} mb="md">Sign In</Title>
       <GhostForm
         action={handleSignIn}
         submitText="Sign In"
@@ -90,10 +90,10 @@ const SignIn = () => {
           },
         ]}
       />
-      <p className="absolute bottom-5 w-full text-center text-xs">
-        <Link href="/terms">Terms of Service</Link> | <Link href="/privacy">Privacy Policy</Link>
-      </p>
-    </main>
+      <Text size="xs" ta="center" pos="absolute" bottom={20}>
+        <Anchor href="/terms" size="xs">Terms of Service</Anchor> | <Anchor href="/privacy" size="xs">Privacy Policy</Anchor>
+      </Text>
+    </Container>
   );
 };
 

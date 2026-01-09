@@ -2,6 +2,13 @@ import { Barlow, Cousine } from "next/font/google";
 
 import type { Metadata } from "next";
 
+import { ColorSchemeScript, MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
+import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
+import '@mantine/dates/styles.css';
+
+import { theme } from '@/theme/mantine-theme';
 import { StoreProvider } from "@/providers/StoreProvider";
 
 import "./globals.css";
@@ -31,7 +38,15 @@ export default function RootLayout({
   return (
     <StoreProvider>
       <html lang="en">
-        <body className={`${barlow.variable} ${mono.variable} antialiased`}>{children}</body>
+        <head>
+          <ColorSchemeScript />
+        </head>
+        <body className={`${barlow.variable} ${mono.variable} antialiased`}>
+          <MantineProvider theme={theme}>
+            <Notifications />
+            {children}
+          </MantineProvider>
+        </body>
       </html>
     </StoreProvider>
   );

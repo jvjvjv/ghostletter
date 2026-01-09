@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { useSelector } from "react-redux";
+import { Stack, Paper, Title } from '@mantine/core';
 
 import type { ChatPreview } from "@/types/ChatPreview";
 import type { Friend } from "@/types/Friend";
@@ -101,12 +102,12 @@ export default function ChatListView() {
   };
 
   return (
-    <div className="page p-0">
-      <header className="border-b border-gray-200 bg-white p-4">
-        <h1 className="text-center text-xl font-semibold">Chats</h1>
-      </header>
+    <Stack gap={0} h="100vh" p={0}>
+      <Paper shadow="xs" p="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
+        <Title order={1} ta="center" size="h3">Chats</Title>
+      </Paper>
 
-      <main className="flex-1 overflow-y-auto">
+      <div style={{ flex: 1, overflowY: 'auto' }}>
         <ChatListContent
           chats={chats}
           getFriendById={getFriendById}
@@ -114,7 +115,7 @@ export default function ChatListView() {
           onChatSelect={openChat}
           onTakePhoto={() => router.push("/main/camera")}
         />
-      </main>
-    </div>
+      </div>
+    </Stack>
   );
 }

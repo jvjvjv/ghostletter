@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import React, { use, useState, useEffect, useRef, useCallback } from "react";
+import { Paper, Group, ActionIcon, TextInput, Stack, Text } from '@mantine/core';
+import { IconArrowLeft, IconSend, IconCamera } from '@tabler/icons-react';
 
 import type { Friend } from "@/types/Friend";
 import type { Message } from "@/types/Message";
@@ -229,65 +231,71 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
   };
 
   return (
-    <div className="page relative p-0">
+    <Stack gap={0} h="100vh" pos="relative">
       {/* Header with friend info */}
-      <header className="flex items-center border-b border-gray-200 bg-white p-4">
-        <button onClick={() => router.push("/main/chat")} className="mr-3">
-          ←
-        </button>
+      <Paper shadow="xs" p="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
+        <Group gap="md">
+          <ActionIcon onClick={() => router.push("/main/chat")} variant="subtle" size="lg">
+            <IconArrowLeft size={20} />
+          </ActionIcon>
 
-        {friend && (
-          <div className="flex items-center gap-3">
-            <Avatar friend={friend} size={10} />
-            <span className="font-semibold">{friend.name}</span>
-          </div>
-        )}
-      </header>
+          {friend && (
+            <Group gap="sm">
+              <Avatar friend={friend} size={10} />
+              <Text fw={600}>{friend.name}</Text>
+            </Group>
+          )}
+        </Group>
+      </Paper>
 
       {/* Message list */}
-      <main className="h-full overflow-y-auto p-4">
+      <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
         {conversationLoading ? (
-          <div className="flex h-full items-center justify-center">
-            <p className="text-gray-500">Loading messages...</p>
-          </div>
+          <Stack align="center" justify="center" h="100%">
+            <Text c="dimmed">Loading messages...</Text>
+          </Stack>
         ) : (
-          <div className="space-y-4">
+          <Stack gap="md">
             {messages.map((message) => (
               <MessageItem key={message.id} message={message} onImageClick={handleImageClick} />
             ))}
             <div ref={messagesEndRef} />
-          </div>
+          </Stack>
         )}
-      </main>
+      </div>
 
       {/* Message input */}
-      <footer className="absolute bottom-16 w-full border-t border-gray-200 bg-white p-3">
-        <div className="flex items-center space-x-2">
-          <input
-            type="text"
+      <Paper pos="absolute" bottom={64} w="100%" p="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
+        <Group gap="xs" wrap="nowrap">
+          <TextInput
+            flex={1}
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Message..."
-            className="flex-1 rounded-full border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:outline-none"
+            radius="xl"
           />
-          <button
+          <ActionIcon
             onClick={handleSendMessage}
             disabled={!newMessage.trim()}
-            className={`flex h-10 w-10 items-center justify-center rounded-full ${
-              newMessage.trim() ? "bg-indigo-500 text-white" : "bg-gray-200 text-gray-400"
-            }`}
+            color="secondary"
+            variant="filled"
+            size="lg"
+            radius="xl"
           >
-            →
-          </button>
-          <button
+            <IconSend size={18} />
+          </ActionIcon>
+          <ActionIcon
             onClick={() => router.push("/main/camera")}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-indigo-100 text-indigo-500"
+            color="secondary"
+            variant="light"
+            size="lg"
+            radius="xl"
           >
-            📷
-          </button>
-        </div>
-      </footer>
-    </div>
+            <IconCamera size={18} />
+          </ActionIcon>
+        </Group>
+      </Paper>
+    </Stack>
   );
 }

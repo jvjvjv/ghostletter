@@ -1,4 +1,5 @@
 import React from "react";
+import { Avatar as MantineAvatar } from '@mantine/core';
 
 import type { Friend } from "@/types/Friend";
 
@@ -37,38 +38,38 @@ const getTextColor = (backgroundColor: string): string => {
   const luminance = 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
 
   // Return white for dark backgrounds, black for light backgrounds
-  return luminance > 0.5 ? "var(--foreground)" : "var(--background)";
+  return luminance > 0.5 ? "black" : "white";
 };
 
 const Avatar = (props: AvatarProps) => {
-  const { friend } = props;
+  const { friend, size, className } = props;
 
-  // Map size to font size in rem (Tailwind equivalents)
-  const fontSizeMap = {
-    8: "0.875rem", // text-sm
-    10: "1rem", // text-base (md)
-    16: "1.75rem", // text-lg
-    24: "2.5rem",
+  const textSize = {
+    8: 32,   // 2rem
+    10: 40,  // 2.5rem
+    16: 64,  // 4rem
+    24: 96,  // 6rem
   };
 
-  const hasImage = !!friend.imageUrl;
-  const sizeInRem = props.size / 4; // Convert Tailwind size to rem (4px = 0.25rem base)
-  const textColor = hasImage ? "#ffffff" : getTextColor(friend.color);
+  const textColor = friend.imageUrl ? "#ffffff" : getTextColor(friend.color);
 
   return (
-    <div
-      className={`flex items-center justify-center rounded-full ${props.className ?? ""} ${hasImage ? "bg-cover bg-center" : ""}`}
-      style={{
-        width: `${sizeInRem}rem`,
-        height: `${sizeInRem}rem`,
-        fontSize: fontSizeMap[props.size],
-        background: hasImage ? `url(${friend.imageUrl})` : friend.color,
-        color: textColor,
+    <MantineAvatar
+      src={friend.imageUrl}
+      size={textSize[size]}
+      radius="50%"
+      className={className}
+      color={textColor}
+      styles={{
+        root: {
+          backgroundColor: friend.color,
+        },
       }}
+      alt={friend.name}
     >
-      {!hasImage ? friend.initials : null}
-    </div>
+      {!friend.imageUrl && friend.initials}
+    </MantineAvatar>
   );
-};;;;;;;;;;;;;
+};
 
 export default Avatar;

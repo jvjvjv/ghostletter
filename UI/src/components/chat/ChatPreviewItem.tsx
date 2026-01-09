@@ -1,6 +1,7 @@
 "use client";
 
 import { DateTime } from "luxon";
+import { UnstyledButton, Group, Stack, Text, Badge } from '@mantine/core';
 import Avatar from "@/components/Avatar";
 import type { ChatPreview } from "@/types/ChatPreview";
 import type { Friend } from "@/types/Friend";
@@ -18,22 +19,40 @@ const truncateMessage = (message: string, maxLength = 40) => {
 
 export default function ChatPreviewItem({ chat, friend, onSelect }: ChatPreviewItemProps) {
   return (
-    <div
+    <UnstyledButton
       onClick={() => onSelect(chat.id)}
-      className="flex w-full cursor-pointer items-center gap-4 p-2 transition hover:bg-gray-50"
+      w="100%"
+      data-testid="chat-preview-item"
+      style={{
+        padding: '0.5rem',
+        transition: 'background-color 0.2s',
+      }}
+      styles={{
+        root: {
+          '&:hover': {
+            backgroundColor: 'var(--mantine-color-gray-0)',
+          },
+        },
+      }}
     >
-      <Avatar friend={friend} size={10} />
+      <Group gap="md" wrap="nowrap">
+        <Avatar friend={friend} size={10} />
 
-      <div className="flex flex-1 flex-col items-start text-left">
-        <div className="mb-1 flex w-full justify-between">
-          <span className="font-medium">{chat.name}</span>
-          <span className="text-xs text-gray-500">{DateTime.fromISO(chat.timestamp).toRelative()}</span>
-        </div>
-        <div className="flex items-center">
-          <p className="text-sm text-gray-600">{truncateMessage(chat.lastMessage)}</p>
-          {chat.hasUnread && <span className="bg-secondary ml-2 h-2 w-2 rounded-full"></span>}
-        </div>
-      </div>
-    </div>
+        <Stack gap={4} style={{ flex: 1, minWidth: 0 }}>
+          <Group justify="space-between" wrap="nowrap">
+            <Text fw={500} truncate>{chat.name}</Text>
+            <Text size="xs" c="dimmed" style={{ whiteSpace: 'nowrap' }}>
+              {DateTime.fromISO(chat.timestamp).toRelative()}
+            </Text>
+          </Group>
+          <Group gap="xs" wrap="nowrap">
+            <Text size="sm" c="dimmed" truncate style={{ flex: 1 }}>
+              {truncateMessage(chat.lastMessage)}
+            </Text>
+            {chat.hasUnread && <Badge color="secondary" size="xs" circle />}
+          </Group>
+        </Stack>
+      </Group>
+    </UnstyledButton>
   );
 }

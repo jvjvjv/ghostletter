@@ -1,23 +1,21 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import { Divider, Anchor, Container } from '@mantine/core';
 
 import "../globals.css";
-import "./legal.css";
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const router = useRouter();
   return (
     <>
       {children}
-      <hr />
-      <button onClick={() => router.back()} className="p-1">
-        Back
-      </button>
+      <Container size="md">
+        <Divider mt="xl" />
+        <Anchor href="/sign-in" mt="sm" display="block">
+          Back to Sign In
+        </Anchor>
+      </Container>
     </>
   );
 }

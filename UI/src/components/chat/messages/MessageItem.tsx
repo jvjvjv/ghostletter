@@ -1,6 +1,7 @@
 "use client";
 
 import { DateTime } from "luxon";
+import { Box, Text } from '@mantine/core';
 import type { Message } from "@/types/Message";
 
 import ImageMessageBubble from "./ImageMessageBubble";
@@ -12,23 +13,36 @@ type MessageItemProps = {
 };
 
 export default function MessageItem({ message, onImageClick }: MessageItemProps) {
-  const alignment = message.isFromMe ? "justify-end" : "justify-start";
-  const bubbleStyles = message.isFromMe
-    ? "rounded-br-none bg-indigo-500 text-white"
-    : "rounded-bl-none border border-gray-200 bg-white";
+  const alignment = message.isFromMe ? "flex-end" : "flex-start";
+  const backgroundColor = message.isFromMe ? 'var(--mantine-color-secondary-5)' : 'white';
+  const textColor = message.isFromMe ? 'white' : 'black';
+  const borderRadius = message.isFromMe ? '12px 12px 0 12px' : '12px 12px 12px 0';
 
   return (
-    <div className={`flex ${alignment}`}>
-      <div className={`max-w-[75%] rounded-lg p-3 ${bubbleStyles}`}>
+    <div style={{ display: 'flex', justifyContent: alignment }} data-testid="message-item">
+      <Box
+        style={{
+          maxWidth: '75%',
+          borderRadius,
+          padding: '12px',
+          backgroundColor,
+          color: textColor,
+          border: message.isFromMe ? 'none' : '1px solid var(--mantine-color-gray-2)',
+        }}
+      >
         {message.type === "text" ? (
           <TextMessageBubble message={message} />
         ) : (
           <ImageMessageBubble message={message} onImageClick={onImageClick} />
         )}
-        <div className={message.isFromMe ? "mt-1 text-xs text-indigo-200" : "mt-1 text-xs text-gray-500"}>
+        <Text
+          size="xs"
+          mt="xs"
+          c={message.isFromMe ? 'rgba(255, 255, 255, 0.7)' : 'dimmed'}
+        >
           {DateTime.fromISO(message.timestamp).toLocaleString(DateTime.DATETIME_MED)}
-        </div>
-      </div>
+        </Text>
+      </Box>
     </div>
   );
 }

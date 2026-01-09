@@ -3,9 +3,9 @@
 import type { ChatPreview } from "@/types/ChatPreview";
 import type { Friend } from "@/types/Friend";
 import Image from "next/image";
+import { Stack, Text, Title, Divider, Center, Button } from '@mantine/core';
 
 import ChatPreviewItem from "./ChatPreviewItem";
-import { Button } from "../ui/button";
 
 type ChatListContentProps = {
   chats: Array<ChatPreview>;
@@ -31,39 +31,62 @@ export default function ChatListContent({
   }
 
   return (
-    <div className="divide-y divide-gray-100">
-      {chats.map((chat) => {
+    <Stack gap={0}>
+      {chats.map((chat, index) => {
         const friend = getFriendById(chat.id);
         if (!friend) return null;
 
-        return <ChatPreviewItem key={chat.id} chat={chat} friend={friend} onSelect={onChatSelect} />;
+        return (
+          <div key={chat.id}>
+            <ChatPreviewItem chat={chat} friend={friend} onSelect={onChatSelect} />
+            {index < chats.length - 1 && <Divider />}
+          </div>
+        );
       })}
-    </div>
+    </Stack>
   );
 }
 
 function LoadingState() {
   return (
-    <div className="flex h-full flex-col items-center justify-center p-4 text-center">
-      <div className="bg-secondary mb-4 flex h-24 w-24 items-center justify-center rounded-full">
-        <Image priority src="/ghostletter.svg" width={96} height={96} alt="Ghostletter ghost" />
-      </div>
-      <p className="text-gray-500">Loading chats...</p>
-    </div>
+    <Center h="100%" p="lg">
+      <Stack align="center" gap="md">
+        <div style={{
+          width: '96px',
+          height: '96px',
+          borderRadius: '50%',
+          backgroundColor: 'var(--mantine-color-secondary-5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Image priority src="/ghostletter.svg" width={96} height={96} alt="Ghostletter ghost" />
+        </div>
+        <Text c="dimmed">Loading chats...</Text>
+      </Stack>
+    </Center>
   );
 }
 
 function EmptyState({ onTakePhoto }: { onTakePhoto: () => void }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center p-4 text-center">
-      <div className="bg-secondary mb-4 flex h-24 w-24 items-center justify-center rounded-full">
-        <Image priority src="/ghostletter-frown.svg" width={96} height={96} alt="Ghostletter ghost, frowning" />
-      </div>
-      <h3 className="mb-2 text-lg font-semibold">No chats yet</h3>
-      <p className="mb-4 text-gray-500">Start taking photos and sending them to friends!</p>
-      <Button onClick={onTakePhoto} variant="ghost" className="button-submit">
-        Take a Photo
-      </Button>
-    </div>
+    <Center h="100%" p="lg">
+      <Stack align="center" gap="md">
+        <div style={{
+          width: '96px',
+          height: '96px',
+          borderRadius: '50%',
+          backgroundColor: 'var(--mantine-color-secondary-5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+          <Image priority src="/ghostletter-frown.svg" width={96} height={96} alt="Ghostletter ghost, frowning" />
+        </div>
+        <Title order={3}>No chats yet</Title>
+        <Text c="dimmed" ta="center">Start taking photos and sending them to friends!</Text>
+        <Button onClick={onTakePhoto}>Take a Photo</Button>
+      </Stack>
+    </Center>
   );
 }

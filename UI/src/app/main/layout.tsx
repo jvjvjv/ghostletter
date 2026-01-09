@@ -1,8 +1,7 @@
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import { IconMapPin, IconMessages, IconCamera, IconUsers, IconSettings } from '@tabler/icons-react';
+import { Paper, Group } from '@mantine/core';
 
 import NavButton from "@/components/NavButton";
-
-const { faComments, faCameraRetro, faGear, faLocationDot, faUserGroup } = fas;
 
 export default function RootLayout({
   children,
@@ -12,20 +11,35 @@ export default function RootLayout({
   return (
     <>
       {children}
-      <nav className="absolute bottom-0 left-0 z-10 flex h-16 w-full items-center justify-around overflow-hidden border-t border-gray-200 bg-gray-100">
-        <NavButton
-          active={false}
-          icon={faLocationDot}
-          label=""
-          action="/main/chat"
-          disabled
-          tooltip="Share your location: Disabled for this demo"
-        />
-        <NavButton active={false} icon={faComments} label="" action="/main/chat" tooltip="Chats" />
-        <NavButton active={false} icon={faCameraRetro} label="" action="/main/camera" tooltip="Camera" />
-        <NavButton active={false} icon={faUserGroup} label="" action="/main/chat" disabled tooltip="Your Stories" />
-        <NavButton active={false} icon={faGear} label="" action="/main/settings" tooltip="Settings" />
-      </nav>
+      <Paper
+        component="nav"
+        pos="absolute"
+        bottom={0}
+        left={0}
+        style={{
+          zIndex: 10,
+          height: '64px',
+          width: '100%',
+          overflow: 'hidden',
+          borderTop: '1px solid var(--mantine-color-gray-2)',
+          backgroundColor: 'var(--mantine-color-gray-1)',
+        }}
+      >
+        <Group gap={0} bg={'primary'} justify="space-around" align="center" h="100%">
+          <NavButton
+            active={false}
+            icon={<IconMapPin size={20} />}
+            label=""
+            action="/main/chat"
+            disabled
+            tooltip="Share your location: Disabled for this demo"
+          />
+          <NavButton active={false} icon={<IconMessages size={20} />} label="" action="/main/chat" tooltip="Chats" />
+          <NavButton active={false} icon={<IconCamera size={20} />} label="" action="/main/camera" tooltip="Camera" />
+          <NavButton active={false} icon={<IconUsers size={20} />} label="" action="/main/chat" disabled tooltip="Your Stories" />
+          <NavButton active={false} icon={<IconSettings size={20} />} label="" action="/main/settings" tooltip="Settings" />
+        </Group>
+      </Paper>
     </>
   );
 }
