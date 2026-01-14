@@ -4,10 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## TODO: Issues to Fix
 
-1. **Photo Preview**: "Click to view photo" should display a blurred version of the photo instead of placeholder text.
-2. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
-3. **Use better icons**: When I didn't specify, Github Copilot did not choose good icons. Need to replace them with actually nice looking ones, that better fit the mobile device vibe.
-4. **Turn off camera when not on Camera page**: Right now the camera stays on even when navigating away from the Camera page, wasting resources, battery, and probably causing privacy concerns.
+1. **Expiration Time Configuration**: Expiration time should be controlled via API call rather than hardcoded magic numbers in the UI source code.
 
 ## Project Overview
 

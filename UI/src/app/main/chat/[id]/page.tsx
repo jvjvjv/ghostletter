@@ -1,15 +1,13 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React, { use, useState, useEffect, useRef, useCallback } from "react";
-import { Paper, Group, ActionIcon, TextInput, Stack, Text } from '@mantine/core';
-import { IconArrowLeft, IconSend, IconCamera } from '@tabler/icons-react';
+import { use, useState, useEffect, useRef, useCallback } from "react";
+import { Stack, Text } from '@mantine/core';
 
 import type { Friend } from "@/types/Friend";
 import type { Message } from "@/types/Message";
 
-import Avatar from "@/components/Avatar";
 import MessageItem from "@/components/chat/messages/MessageItem";
+import MessageBar from "@/components/chat/MessageBar";
 import store from "@/store";
 import { selectFriendById } from "@/store/friendsSlice";
 import {
@@ -23,6 +21,7 @@ import {
   markViewedThunk,
 } from "@/store/messagesSlice";
 import { useAppSelector } from "@/store/hooks";
+import ChatHeader from "@/components/chat/ChatHeader";
 
 const THRESHOLD = 10; // seconds
 
@@ -37,7 +36,6 @@ type ChatDetailPageProps = {
 export default function ChatDetailView(props: ChatDetailPageProps) {
   const { id } = use(props.params);
   const chatId = parseInt(id);
-  const router = useRouter();
   const [friend, setFriend] = useState<Friend | null>(null);
   const [messages, setMessages] = useState<Array<Message>>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -183,13 +181,6 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
   const handleImageClick = async (messageId: number, expiryTimestamp?: number) => {
     const now = Date.now();
     const msg = selectMessageById(store.getState(), messageId);
@@ -233,20 +224,7 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
   return (
     <Stack gap={0} h="100vh" pos="relative">
       {/* Header with friend info */}
-      <Paper shadow="xs" p="md" style={{ borderBottom: '1px solid var(--mantine-color-gray-2)' }}>
-        <Group gap="md">
-          <ActionIcon onClick={() => router.push("/main/chat")} variant="subtle" size="lg">
-            <IconArrowLeft size={20} />
-          </ActionIcon>
-
-          {friend && (
-            <Group gap="sm">
-              <Avatar friend={friend} size={10} />
-              <Text fw={600}>{friend.name}</Text>
-            </Group>
-          )}
-        </Group>
-      </Paper>
+      <ChatHeader friend={friend} />
 
       {/* Message list */}
       <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
@@ -265,37 +243,11 @@ export default function ChatDetailView(props: ChatDetailPageProps) {
       </div>
 
       {/* Message input */}
-      <Paper pos="absolute" bottom={64} w="100%" p="md" style={{ borderTop: '1px solid var(--mantine-color-gray-2)' }}>
-        <Group gap="xs" wrap="nowrap">
-          <TextInput
-            flex={1}
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder="Message..."
-            radius="xl"
-          />
-          <ActionIcon
-            onClick={handleSendMessage}
-            disabled={!newMessage.trim()}
-            color="secondary"
-            variant="filled"
-            size="lg"
-            radius="xl"
-          >
-            <IconSend size={18} />
-          </ActionIcon>
-          <ActionIcon
-            onClick={() => router.push("/main/camera")}
-            color="secondary"
-            variant="light"
-            size="lg"
-            radius="xl"
-          >
-            <IconCamera size={18} />
-          </ActionIcon>
-        </Group>
-      </Paper>
+      <MessageBar
+        value={newMessage}
+        onChange={setNewMessage}
+        onSend={handleSendMessage}
+      />
     </Stack>
   );
 }

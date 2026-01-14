@@ -24,8 +24,8 @@ class WipeAndSeedOnLogin {
         Image::query()->delete();
 
         // Reseed the tables
-        Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\ImageSeeder']);
-        Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\MessageSeeder']);
+        Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\ImageSeeder', '--force' => true]);
+        Artisan::call('db:seed', ['--class' => 'Database\\Seeders\\MessageSeeder', '--force' => true]);
 
     }
 }

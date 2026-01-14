@@ -24,7 +24,7 @@ export default function MessageItem({ message, onImageClick }: MessageItemProps)
         style={{
           maxWidth: '75%',
           borderRadius,
-          padding: '12px',
+          padding: '8px 12px',
           backgroundColor,
           color: textColor,
           border: message.isFromMe ? 'none' : '1px solid var(--mantine-color-gray-2)',

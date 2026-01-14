@@ -48,7 +48,7 @@ const GhostForm = ({ action, fields, submitText }: IForm) => {
 
   return (
     <Form action={stateAction}>
-      <Stack gap="md" maw={420} w="100%" align="center">
+      <Stack gap="md" w={320}>
         {fields.map((field) => (
           <GhostFormField
             key={field.name}
@@ -62,21 +62,21 @@ const GhostForm = ({ action, fields, submitText }: IForm) => {
 
         {/* Loading state */}
         {isPending && (
-          <Alert color="blue" title="Processing" icon={<IconAlertCircle />}>
+          <Alert color="blue">
             Logging in...
           </Alert>
         )}
 
         {/* Error state */}
         {!isPending && state.message && !state.success && (
-          <Alert color="red" icon={<IconAlertCircle />} role="alert">
+          <Alert color="red" role="alert">
             {state.message}
           </Alert>
         )}
 
         {/* Success state */}
         {!isPending && state.message && state.success && (
-          <Alert color="green" icon={<IconCheck />} role="alert">
+          <Alert color="green" role="alert">
             {state.message}
           </Alert>
         )}

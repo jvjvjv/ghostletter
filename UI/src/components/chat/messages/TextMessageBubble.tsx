@@ -5,5 +5,8 @@ type TextMessageBubbleProps = {
 };
 
 export default function TextMessageBubble({ message }: TextMessageBubbleProps) {
-  return <p>{message.content}</p>;
+  return <p style={{
+    marginBlockStart: '0.5rem',
+    marginBlockEnd: '0.5rem',
+  }}>{message.content}</p>;
 }

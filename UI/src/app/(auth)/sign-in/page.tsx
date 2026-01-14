@@ -64,7 +64,7 @@ const SignIn = () => {
   };
 
   return (
-    <Container h="100vh" display="flex" style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+    <Container h="100vh" display="flex" style={{ flexDirection: 'column', alignItems: 'center', paddingTop: '10vh' }}>
       <Center mb="md">
         <Image priority src="/ghostletter-circle.svg" width={320} height={320} alt="Ghostletter: Send your pictures!" />
       </Center>

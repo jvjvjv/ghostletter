@@ -1,7 +1,10 @@
 "use client";
 
-import Image from "next/image";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 import type { Message } from "@/types/Message";
+import { Button, Text } from "@mantine/core";
+import ImageViewer from "./ImageViewer";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
@@ -11,49 +14,53 @@ type ImageMessageBubbleProps = {
 };
 
 export default function ImageMessageBubble({ message, onImageClick }: ImageMessageBubbleProps) {
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
   const isWaiting = Boolean(message.imageUrl && !message.expiryTimestamp);
   const isViewing = Boolean(message.imageUrl && message.countdown && message.expiryTimestamp);
   const isExpired = Boolean(message.imageUrl && message.status === "expired");
   const hasImage = Boolean(message.imageUrl);
 
+  const handleViewClick = () => {
+    onImageClick(message.id, message.expiryTimestamp);
+    setIsViewerOpen(true);
+  };
+
+  const handleViewerClose = () => {
+    setIsViewerOpen(false);
+  };
+
   return (
-    <div className="relative">
+    <>
       {isWaiting && hasImage ? (
-        <div className="relative">
-          <button
-            className="button-submit rounded p-2"
-            onClick={() => onImageClick(message.id, message.expiryTimestamp)}
-          >
-            View
-          </button>
-        </div>
+        <Button onClick={handleViewClick}>View</Button>
       ) : isViewing && message.imageUrl ? (
-        <div className="relative overflow-hidden">
-          <Image
-            id={`image-${message.id}`}
-            src={`${API_URL}${message.imageUrl}`}
-            alt={message.imageDescription || "Photo"}
-            width={300}
-            height={240}
-            className={`max-h-64 w-auto max-w-xs cursor-pointer rounded object-cover transition-all duration-300 ${
-              message.expiryTimestamp && message.expiryTimestamp < Date.now() ? "blur-xl" : ""
-            }`}
-            unoptimized
-          />
-          <div
-            id={`countdown-${message.id}`}
-            className={`bg-opacity-70 absolute top-2 right-2 rounded-full bg-black px-2 py-1 text-xs text-white ${
-              message.imgViewed ? "" : "hidden"
-            }`}
-          >
-            {message.expiryTimestamp && message.expiryTimestamp < Date.now() ? "Expired" : `${message.countdown ?? 0}s`}
-          </div>
-        </div>
+        <Text c="dimmed" size="sm" fs="italic">
+          Photo viewed
+        </Text>
       ) : isExpired ? (
-        <p className="text-gray-500 italic">Photo expired</p>
+        <Text c="dimmed" size="sm" fs="italic">
+          Photo expired
+        </Text>
       ) : (
-        <p className="text-gray-500 italic">Photo unavailable</p>
+        <Text c="dimmed" size="sm" fs="italic">
+          Photo unavailable
+        </Text>
       )}
-    </div>
+
+      {/* Fullscreen image viewer */}
+      {isViewerOpen &&
+        message.imageUrl &&
+        message.countdown !== undefined &&
+        message.countdown > 0 &&
+        createPortal(
+          <ImageViewer
+            imageUrl={`${API_URL}${message.imageUrl}`}
+            countdown={message.countdown}
+            onExpired={handleViewerClose}
+          />,
+          document.body
+        )}
+    </>
   );
 }
